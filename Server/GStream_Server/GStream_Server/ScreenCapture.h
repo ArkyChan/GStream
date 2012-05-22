@@ -25,7 +25,7 @@ public:
 	unsigned int p_frame();
 	unsigned int tPix,TPix;
 	Frame lFrame,pFrame;
-	HDC hDC;
+	HDC hDC,hDest;
 	winInfo inf;
 	COLORREF getPixel(HBITMAP,int,int);
 };

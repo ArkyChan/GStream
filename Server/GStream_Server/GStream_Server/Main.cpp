@@ -53,7 +53,7 @@ int main() {
 			min = times[i];
 	}
 	cout << "Avegrage: " << (sum / TESTRUNS) << endl;
-	cout << "Min/Max: " << min << "/" << max << endl;
+	cout << "Min/Max: " << min << "-" << max << endl;
 	
 	//startGame("E:\\Terra\\NA\\TERA\\TERA-Launcher.exe");
 

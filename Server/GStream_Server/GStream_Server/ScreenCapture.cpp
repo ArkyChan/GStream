@@ -7,22 +7,23 @@ ScreenCapture::ScreenCapture(HWND handle){
 	this->lFrame = *new Frame();
 	this->pFrame = *new Frame();
 	this->inf = this->hwndTowinInfo(handle);
+	std::cout << "Image res: " << this->inf.w << "x" << this->inf.h << std::endl;
 }
 
 // Capture the screen, returns a bitmap
 HBITMAP ScreenCapture::capScreen(winInfo info)
 {
 	this->hDC = GetDC(info.handle); // get the desktop device context
-    HDC hDest = CreateCompatibleDC(this->hDC); // create a device context to use yourself
+    this->hDest = CreateCompatibleDC(this->hDC); // create a device context to use yourself
 
     // create a bitmap
     HBITMAP hbDesktop = CreateCompatibleBitmap(this->hDC, info.w, info.h);
 
     // use the previously created device context with the bitmap
-    SelectObject(hDest, hbDesktop);
+    SelectObject(this->hDest, hbDesktop);
 
     // copy from the desktop device context to the bitmap device context
-    BitBlt( hDest, info.x, info.y, info.w, info.h, this->hDC, 0, 0, SRCCOPY);
+    BitBlt( this->hDest, info.x, info.y, info.w, info.h, this->hDC, 0, 0, SRCCOPY);
 
 	return hbDesktop;
 }
@@ -34,7 +35,8 @@ unsigned int ScreenCapture::p_frame(){
 
 	for(int x = 0;x<this->inf.w;x++){
 		for(int y=0;y<this->inf.h;y++){
-			Pixel p = {x,y,this->getPixel(f, x,y)};
+			//p = {x,y,this->getPixel(f, x,y)};
+			this->getPixel(f, x,y);
 			this->tPix++;
 			this->TPix++;
 
@@ -44,8 +46,8 @@ unsigned int ScreenCapture::p_frame(){
 		}
 	}
  
-	lFrame = pFrame;
-    ReleaseDC(GetDesktopWindow(), hDC);
+	//lFrame = pFrame;
+    //ReleaseDC(GetDesktopWindow(), hDC);
     return result;
 }
 
@@ -162,16 +164,11 @@ return TRUE;
 }
 
 COLORREF ScreenCapture::getPixel(HBITMAP bmp,int x,int y){
-	LPSIZE size = *new LPSIZE();
-	LPVOID *lpvBits = new LPVOID();
+	COLORREF pixelColor;
+	pixelColor = ::GetPixel(this->hDest, x,y);
 
-	GetBitmapDimensionEx(bmp,size);
-	GetDIBits(this->hDC,bmp,0,size->cy,lpvBits,NULL,DIB_RGB_COLORS);
+	DeleteDC(this->hDest);
+	ReleaseDC(NULL, hDC);
 
-	int BitsPerPixel=2;
-	int nLineWidth = BitsPerPixel*size->cx;
-	int nPosOnBuffer = nLineWidth*x + y*BitsPerPixel;
-	COLORREF rgb = (COLORREF)lpvBits[nPosOnBuffer];
-
-	return rgb;
+	return pixelColor;
 }

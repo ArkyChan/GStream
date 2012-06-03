@@ -1,34 +1,47 @@
 #ifndef FRAME_H
 #define FRAME_H
 
-struct Pixel{
-	int x,y;
-	DWORD col;
-
-	bool operator !=(Pixel p){
-		if(p.x != x && p.y != y && p.col != col)
-			return true;
-		return false;
-	}
-};
 class Frame{
 public:
 	Frame(){
-		data = new Pixel*[720];
-		for(int i=0;i<720;i++){
-			data[i] = new Pixel[1280];
-		}
+		this->data = NULL;
+		this->w = 0;
+		this->h = 0;
+		this->bpp = 0;
 	}
 	~Frame(){
-		for(int i=0;i<720;i++){
-			//delete[] &data[i];
-		}
-		
+		delete data;
 	}
-	Pixel& operator()(int x,int y){
-		return data[x][y];
+	Frame(unsigned char* data,int width,int height,short bytesPerPixel){
+		this->data = data;
+		this->w = width;
+		this->h = height;
+		this->bpp = bytesPerPixel;
+	}
+
+	int getPixel(int x,int y){
+		return this->data[x*y*this->bpp];
+	}
+
+	int getWidth(){
+		return this->w;
+	}
+
+	int getHeight(){
+		return this->h;
+	}
+
+	void setData(unsigned char* nData){
+		delete this->data;
+		this->data = nData;
+	}
+
+	unsigned char* getData(){
+		return this->data;
 	}
 private:
-	Pixel **data;
+	unsigned char* data;
+	short bpp;
+	int w,h;
 };
 #endif

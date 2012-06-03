@@ -22,7 +22,7 @@ void progress(){
 	}
 }
 
-#define TESTRUNS 100
+#define TESTRUNS 500
 int main() {
 	//Sleep(5000);
 	unsigned int timeBefore = clock();
@@ -36,11 +36,14 @@ int main() {
 	boost::thread workerThread(progress);
 	
 	cout << "Do b-frames" << endl;
+	unsigned int res=0;
 	for (int i = 0; i < TESTRUNS; i++)
 	{
 		timeBefore = clock();
-		s->p_frame();
+		res = s->p_frame();
 		times[i] = (clock() - timeBefore);
+
+		//cout << res << endl;
 	}
 
 	unsigned int sum=0,min=INT_MAX,max=0;

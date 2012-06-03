@@ -1,11 +1,12 @@
 #ifndef SCREENCAPTURE_H
 #define SCREENCAPTURE_H
 
+#include <windows.h>
 #include <iostream>
-#include <Windows.h>
 #include <string>
 #include <ctime>
 #include "Frame.h"
+#include "glCap.h"
 
 // Window info
 struct winInfo
@@ -24,9 +25,10 @@ public:
 	BOOL SaveToFile(HBITMAP hBitmap, LPCTSTR lpszFileName);
 	unsigned int p_frame();
 	unsigned int tPix,TPix;
-	Frame lFrame,pFrame;
+	Frame *lastFrame,*curFrame;
 	HDC hDC,hDest;
 	winInfo inf;
 	COLORREF getPixel(HBITMAP,int,int);
+	glCap gcap;
 };
 #endif

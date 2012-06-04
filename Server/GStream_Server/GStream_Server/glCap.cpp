@@ -226,10 +226,21 @@ bool glCap::WriteTGA(char *file, short int width, short int height, unsigned cha
 	return true;
 }
 
-void glCap::writeRaw(char* file,int x,int y,short bpp){
+void glCap::writeRaw(char* file,int x,int y,short bpp,unsigned char* data=NULL){
 	FILE *pFile;
 	fopen_s(&pFile,file,"wb");
-	fwrite(this->capScreen(x,y),x*y*bpp,1,pFile);
+	/*char e = '\0',major='1',minor='0',one='1',max='\xFF';
+	char id[] = {'R','P','I','X'};
+	int len = 28;
+	fwrite(&id,4,1,pFile);//identifer rpix
+	fwrite(&len,sizeof(int),1,pFile); //length of header
+	fwrite(&major,sizeof(char),1,pFile);
+	fwrite(&minor,sizeof(char),1,pFile);
+	fwrite(&x,sizeof(int),1,pFile);
+	fwrite(&y,sizeof(int),1,pFile);
+	fwrite(&one,sizeof(char),8,pFile);
+	fwrite(&e,sizeof(char),8,pFile);*/
+	fwrite((data==NULL ? this->capScreen(x,y) : data),x*y*bpp,1,pFile);
 	fclose(pFile);
 }
 
@@ -259,8 +270,7 @@ void glCap::SaveTGAScreenShot(char *filename, int w, int h)
 unsigned char * glCap::capScreen(int w,int h){
 	unsigned char *outputImage = 0;
 	outputImage = (unsigned char*)malloc(w * h * 3);
-	memset(outputImage, 0, w * h * 3);
-	glReadBuffer(GL_FRONT);
+	memset(outputImage, 0, w * h * 3); //fill white data
 	glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, outputImage);
 	return outputImage;
 }

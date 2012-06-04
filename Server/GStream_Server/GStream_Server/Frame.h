@@ -10,7 +10,7 @@ public:
 		this->bpp = 0;
 	}
 	~Frame(){
-		delete data;
+		delete this->data;
 	}
 	Frame(unsigned char* data,int width,int height,short bytesPerPixel){
 		this->data = data;
@@ -19,8 +19,9 @@ public:
 		this->bpp = bytesPerPixel;
 	}
 
-	int getPixel(int x,int y){
-		return this->data[x*y*this->bpp];
+	DWORD getPixel(int x,int y){
+		void* d = this->data;
+		return (DWORD)(&d + (this->w*y*this->bpp) + (x*this->bpp));
 	}
 
 	int getWidth(){
@@ -31,8 +32,10 @@ public:
 		return this->h;
 	}
 
-	void setData(unsigned char* nData){
-		delete this->data;
+	void setData(unsigned char* nData,bool del=false){
+		if(del){
+			free(this->data);
+		}
 		this->data = nData;
 	}
 

@@ -16,7 +16,7 @@ public:
 	void SaveTGAScreenShot(char *filename,int width,int height);
 	void FreeImage();
 	unsigned char * capScreen(int,int);
-	void writeRaw(char* file, int,int,short);
+	void writeRaw(char* file, int width,int height,short,unsigned char* data);
 
 	unsigned int ID;
 	int imageWidth;
@@ -26,7 +26,6 @@ protected:
 	void GenerateTexture();
 	bool LoadTGA(char *filename);
 	bool WriteTGA(char *file, short int width, short int height, unsigned char *image);
-
 	bool textureExist;
 	int type;
 };

@@ -1,21 +1,20 @@
 #include "ScreenCapture.h"
 
 ScreenCapture::ScreenCapture(HWND handle) {
-	this->lastFrame = NULL;
-	this->curFrame = NULL;
 	this->tPix = 0;
 	this->TPix = 0;
 	this->hDC = GetDC(NULL);
 	this->inf = this->hwndTowinInfo(NULL);
-	std::cout << "Image res: " << this->inf.w << "x" << this->inf.h << std::endl;
-	//std::cout << "Save a frame" << std::endl;
 
-	/*init frames
-	this->lastFrame = new Frame(screenCapture(),this->inf.w,this->inf.h,3);
-	this->curFrame = this->lastFrame;
-	//save it
-	//gcap.writeRaw("image.raw",this->inf.w,this->inf.h,3,this->lastFrame->getData());*/
-	SaveToFile(capScreen(this->inf),"image.bmp");
+	//force 720p
+	this->inf.w = 1280;
+	this->inf.h = 720;
+
+	//setup frame container
+	this->rgbFrame = new Frame(0,this->inf.w,this->inf.h,3);
+
+	//print screen res
+	std::cout << "Image res: " << this->inf.w << "x" << this->inf.h << std::endl;
 
 	/*
 	* codec settings
@@ -31,55 +30,22 @@ ScreenCapture::ScreenCapture(HWND handle) {
 
 // Capture the screen, returns a bitmap
 HBITMAP ScreenCapture::capScreen(winInfo info){
-	this->hDC = GetDC(info.handle); // get the desktop device context
-	this->hDest = CreateCompatibleDC(this->hDC); // create a device context to use yourself
-	// create a bitmap
+	this->hDC = GetDC(info.handle);
+	this->hDest = CreateCompatibleDC(this->hDC);
 	HBITMAP hbDesktop = CreateCompatibleBitmap(this->hDC, info.w, info.h);
-
-	// use the previously created device context with the bitmap
 	SelectObject(this->hDest, hbDesktop);
-
-	// copy from the desktop device context to the bitmap device context
 	BitBlt( this->hDest, info.x, info.y, info.w, info.h, this->hDC, 0, 0, SRCCOPY | BLACKNESS);
-
 	DeleteDC(this->hDest);
-	//ReleaseDC(0,this->hDC);
+	ReleaseDC(info.handle,this->hDC);
 	return hbDesktop;
-}
-
-unsigned int ScreenCapture::p_frame(){
-	unsigned int result = 0;
-
-	if(this->lastFrame != NULL){
-		this->lastFrame->setData(this->curFrame->getData(),true);
-		this->curFrame->setData(screenCapture());
-		for(int h = 0;h<this->lastFrame->getHeight();h++){
-			for(int w = 0;w<this->lastFrame->getWidth();w++){
-				this->tPix++;
-				this->TPix++;
-
-				//std::cout << "\r" << this->curFrame->getPixel(w,h) << "-" << this->lastFrame->getPixel(w,h) << "      ";
-				//std::cout << "\r" << (this->curFrame->getPixel(w,h)==this->lastFrame->getPixel(w,h) ? "yes" : "no") << " " << h << "x" << w << "          ";
-				//Sleep(1000);
-				if(this->curFrame->getPixel(w,h) != this->lastFrame->getPixel(w,h)){
-					result++;
-				}
-			}
-		}
-	}else {
-		this->lastFrame = new Frame(/*gcap.capScreen(1280,720)*/screenCapture(),this->inf.w,this->inf.h,3);
-		this->curFrame = this->lastFrame;
-	}
-
-	return result;
 }
 
 void ScreenCapture::snap(const char* file){
 	SaveToFile(capScreen(this->inf),file);
 }
+
 // Extracts info from a hwn and returns a winInfo struct
-winInfo ScreenCapture::hwndTowinInfo(HWND handle)
-{
+winInfo ScreenCapture::hwndTowinInfo(HWND handle){
 	winInfo info;
 	if (handle == NULL)
 	{
@@ -117,133 +83,31 @@ winInfo ScreenCapture::hwndTowinInfo(HWND handle)
 	return info;
 }
 
-unsigned char* ScreenCapture::screenCapture()
-{
-	// Arkys quick go
-
-	// Well it get the data and it seems correct but I cant reassmble it into an iamge, almost tho look at yay.png in the server folder
-	/*
-	HBITMAP b = capScreen(this->inf);
-
-	BITMAP Bitmap;
-
-	GetObject(b, sizeof(Bitmap), (LPSTR)&Bitmap);
-
-	HDC dcBitmap = CreateCompatibleDC ( NULL );
-    SelectObject( dcBitmap, b );
-
-    BITMAPINFO bmpInfo;
-    bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmpInfo.bmiHeader.biWidth = Bitmap.bmWidth;
-    bmpInfo.bmiHeader.biHeight = -Bitmap.bmHeight;
-    bmpInfo.bmiHeader.biPlanes = 1;
-    bmpInfo.bmiHeader.biBitCount = 24;
-    bmpInfo.bmiHeader.biCompression = BI_RGB;        
-    bmpInfo.bmiHeader.biSizeImage = 0;        
-
-    COLORREF* pixel = new COLORREF [ Bitmap.bmWidth * Bitmap.bmHeight ];
-    GetDIBits( dcBitmap , b , 0 , Bitmap.bmHeight , pixel , &bmpInfo , DIB_RGB_COLORS );
-	
-	FILE *fp;
-	fp = fopen("C:\\yay.dat", "w");
-
-	int stride = (Bitmap.bmWidth * (24 / 8) + 3) & ~3;
-	std::cout << "Width: " << Bitmap.bmWidth << " Height: " << Bitmap.bmHeight << " Stride: " << stride << std::endl;
-
-
-	char red, green, blue;
-	char* pCurrPixel = (char*)pixel;
-	for (int y = 0; y < Bitmap.bmHeight; y++ )
-	{
-		for (int x = 0; x < Bitmap.bmWidth; x++ )
-		{
-			red = pCurrPixel[0];
-			green = pCurrPixel[1];
-			blue = pCurrPixel[2];
-
-			fwrite(&red, sizeof(char), 1, fp);
-			fwrite(&green, sizeof(char), 1, fp);
-			fwrite(&blue, sizeof(char), 1, fp);
-			pCurrPixel += 4;
-		}
-	}
-
-	fclose(fp);
-
-	std::cout << "Wrote data yay :D !" << std::endl;
-	std::cin.ignore(2);
-	
-	return NULL;
-	*/
-
-	
-	HBITMAP b = capScreen(this->inf);
-	size_t len = this->inf.w*this->inf.h*this->inf.bpp;
-	unsigned char* data = (unsigned char*)malloc(len);
-	GetBitmapBits(b,len,data);
-	DeleteObject(b);
-	return data;
-	
-
-	/*
-	Method 2.
-	HBITMAP b = capScreen(this->inf);
-	BITMAPINFO  bmi;
-	memset(&bmi, 0, sizeof(BITMAPINFO));
-	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	if(0 == GetDIBits(this->hDC, b, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)){
-	std::cout << "Failed to get BITMAPINFO" << std::endl;
-	return 0;
-	}
-	unsigned char* data = (unsigned char*)malloc(this->inf.w*this->inf.h*this->inf.bpp);
-	if(bmi.bmiHeader.biBitCount <= 8){
-	GetDIBits(this->hDC,b,0,bmi.bmiHeader.biHeight,data,&bmi,DIB_RGB_COLORS);
-	}
-	else{
-	GetBitmapBits(b,this->inf.w*this->inf.h*this->inf.bpp,data);
-	}
-	return data;*/
-
-	/*
-	Method 3.
-	unsigned char* data = (unsigned char*)malloc(this->inf.w*this->inf.h*this->inf.bpp);
-	GetObject(capScreen(this->inf),this->inf.w*this->inf.h*this->inf.bpp,data);
-	return data;*/
-
-	/*
-	Method 4
-	HBITMAP b = capScreen(this->inf);
-	size_t size = this->inf.w*this->inf.h*this->inf.bpp;
-	BITMAPINFO  bmi;
-	memset(&bmi, 0, sizeof(BITMAPINFO));
-	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	if(0 == GetDIBits(GetDC(0), b, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)){
-	std::cout << "Failed to get BITMAPINFO" << std::endl;
-	return 0;
-	}
-	VOID** data = 0;
-	BITMAP bm;
-	if(0 == CreateDIBSection(this->hDC,&bmi,DIB_RGB_COLORS,data,0,bmi.bmiHeader.biSize)){
-	std::cout << "System error: " << GetLastError() << std::endl;
-	}
-	if(!GetObject(b,sizeof(BITMAP), &bm)){
-	std::cout << "Could not load image" << std::endl;
-	}else {
-	return (unsigned char*)bm.bmBits;
-	}*/
-	/*
-	size_t size = this->inf.w*this->inf.h*this->inf.bpp;
-	this->hDC = GetDC(this->inf.handle);
-	this->hDest = CreateCompatibleDC(this->hDC);
-	HBITMAP hbDesktop = CreateCompatibleBitmap(this->hDC, this->inf.w, this->inf.h);
-	BITMAP bmpScreen;
-	GetObject(hbDesktop,sizeof(BITMAP),&bmpScreen);   
-	return (unsigned char*)bmpScreen.bmBits;*/
+void ScreenCapture::screenCapture(Frame* f,bool freeLast){
+	this->hDC = GetDC(this->inf.handle); //get a handle to our window
+	this->hDest = CreateCompatibleDC(this->hDC); //create a dc to get our image from
+	HBITMAP hbDesktop = CreateCompatibleBitmap(this->hDC, this->inf.w, this->inf.h);//create a handle to a bitmap
+	SelectObject(this->hDest, hbDesktop); //select the bitmap handle
+	BitBlt( this->hDest, this->inf.x, this->inf.y, this->inf.w, this->inf.h, this->hDC, 0, 0, SRCCOPY); //copy the image
+	BITMAP Bitmap; //setup bitmap
+	GetObject(hbDesktop, sizeof(Bitmap), (LPSTR)&Bitmap); //extract the bitmap object
+	BITMAPINFO bmpInfo;
+	bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmpInfo.bmiHeader.biWidth = Bitmap.bmWidth;
+	bmpInfo.bmiHeader.biHeight = -Bitmap.bmHeight;
+	bmpInfo.bmiHeader.biPlanes = 1;
+	bmpInfo.bmiHeader.biBitCount = 24;
+	bmpInfo.bmiHeader.biCompression = BI_RGB;        
+	bmpInfo.bmiHeader.biSizeImage = 0;     
+	COLORREF* pixel = new COLORREF [ Bitmap.bmWidth * Bitmap.bmHeight ];
+	GetDIBits( this->hDest , hbDesktop , 0 , Bitmap.bmHeight , pixel , &bmpInfo , DIB_RGB_COLORS );
+	DeleteObject(hbDesktop);
+	DeleteDC(this->hDest);
+	f->setData((unsigned char*)pixel,freeLast);
 }
 
 // Save a bit map to disk
-BOOL ScreenCapture::SaveToFile(HBITMAP hBitmap, LPCTSTR lpszFileName)
-{
+BOOL ScreenCapture::SaveToFile(HBITMAP hBitmap, LPCTSTR lpszFileName){
 	HDC hDC;
 	int iBits;
 	WORD wBitCount;

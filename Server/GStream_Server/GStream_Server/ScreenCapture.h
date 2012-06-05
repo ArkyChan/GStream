@@ -6,7 +6,6 @@
 #include <string>
 #include <ctime>
 #include "Frame.h"
-#include "glCap.h"
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
@@ -15,11 +14,9 @@
 #include "vpx/vp8cx.h"
 #define iface (vpx_codec_vp8_cx())
 #define fourcc    0x30385056
- 
+
 #define IVF_FILE_HDR_SZ  (32)
 #define IVF_FRAME_HDR_SZ (12)
-
-#include "Util.h"
 
 // Window info
 struct winInfo
@@ -37,17 +34,15 @@ public:
 	HBITMAP capScreen(winInfo info);
 	winInfo hwndTowinInfo(HWND handle);
 	BOOL SaveToFile(HBITMAP hBitmap, LPCTSTR lpszFileName);
-	unsigned int p_frame();
 	unsigned int tPix,TPix;
-	unsigned char* ScreenCapture::screenCapture();
-	Frame *lastFrame,*curFrame;
+	void ScreenCapture::screenCapture(Frame* frame,bool freeLast=true);
+	Frame *rgbFrame;
 	void snap(const char*);
 	HDC hDC,hDest;
 	winInfo inf;
 	COLORREF getPixel(HBITMAP,int,int);
-	glCap gcap;
 	vpx_codec_ctx_t codec; //codec container
-    vpx_codec_enc_cfg_t cfg; //codec config
+	vpx_codec_enc_cfg_t cfg; //codec config
 	vpx_codec_err_t res; //codec error result
 	int frame_cnt;
 	const vpx_codec_cx_pkt_t *pkt;
@@ -59,6 +54,6 @@ public:
 		if(detail)
 			printf("    %s\n",detail);
 	}
-	
+
 };
 #endif

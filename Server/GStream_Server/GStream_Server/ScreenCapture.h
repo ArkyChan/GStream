@@ -59,5 +59,6 @@ public:
 		if(detail)
 			printf("    %s\n",detail);
 	}
+	
 };
 #endif

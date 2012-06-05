@@ -28,7 +28,7 @@ int main() {
 	//Sleep(5000);
 	unsigned int timeBefore = clock();
 	unsigned int times[TESTRUNS];
-	cout << "Pres enter to start..";
+	cout << "Press enter to start..";
 	cin.ignore();
 	cout << "Get window handle.." <<endl;
 

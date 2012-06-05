@@ -16,6 +16,15 @@
     <Filter Include="Source Files\Debug">
       <UniqueIdentifier>{d338eb2d-c1a7-4859-8614-1ac978f80f85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\net">
+      <UniqueIdentifier>{ca4f6756-8f09-4dbf-a0a0-40e58aaf25e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Video">
+      <UniqueIdentifier>{06359278-6f04-4f08-a580-616e762a9b4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{b9aa3ed4-bf90-490c-873e-d0e71764c2da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -27,8 +36,8 @@
     <ClCompile Include="glCap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tests.cpp">
-      <Filter>Source Files\Debug</Filter>
+    <ClCompile Include="NetworkMain.cpp">
+      <Filter>Source Files\net</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +51,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -117,13 +117,73 @@ winInfo ScreenCapture::hwndTowinInfo(HWND handle)
 	return info;
 }
 
-unsigned char* ScreenCapture::screenCapture(){
+unsigned char* ScreenCapture::screenCapture()
+{
+	// Arkys quick go
+
+	// Well it get the data and it seems correct but I cant reassmble it into an iamge, almost tho look at yay.png in the server folder
+	/*
+	HBITMAP b = capScreen(this->inf);
+
+	BITMAP Bitmap;
+
+	GetObject(b, sizeof(Bitmap), (LPSTR)&Bitmap);
+
+	HDC dcBitmap = CreateCompatibleDC ( NULL );
+    SelectObject( dcBitmap, b );
+
+    BITMAPINFO bmpInfo;
+    bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmpInfo.bmiHeader.biWidth = Bitmap.bmWidth;
+    bmpInfo.bmiHeader.biHeight = -Bitmap.bmHeight;
+    bmpInfo.bmiHeader.biPlanes = 1;
+    bmpInfo.bmiHeader.biBitCount = 24;
+    bmpInfo.bmiHeader.biCompression = BI_RGB;        
+    bmpInfo.bmiHeader.biSizeImage = 0;        
+
+    COLORREF* pixel = new COLORREF [ Bitmap.bmWidth * Bitmap.bmHeight ];
+    GetDIBits( dcBitmap , b , 0 , Bitmap.bmHeight , pixel , &bmpInfo , DIB_RGB_COLORS );
+	
+	FILE *fp;
+	fp = fopen("C:\\yay.dat", "w");
+
+	int stride = (Bitmap.bmWidth * (24 / 8) + 3) & ~3;
+	std::cout << "Width: " << Bitmap.bmWidth << " Height: " << Bitmap.bmHeight << " Stride: " << stride << std::endl;
+
+
+	char red, green, blue;
+	char* pCurrPixel = (char*)pixel;
+	for (int y = 0; y < Bitmap.bmHeight; y++ )
+	{
+		for (int x = 0; x < Bitmap.bmWidth; x++ )
+		{
+			red = pCurrPixel[0];
+			green = pCurrPixel[1];
+			blue = pCurrPixel[2];
+
+			fwrite(&red, sizeof(char), 1, fp);
+			fwrite(&green, sizeof(char), 1, fp);
+			fwrite(&blue, sizeof(char), 1, fp);
+			pCurrPixel += 4;
+		}
+	}
+
+	fclose(fp);
+
+	std::cout << "Wrote data yay :D !" << std::endl;
+	std::cin.ignore(2);
+	
+	return NULL;
+	*/
+
+	
 	HBITMAP b = capScreen(this->inf);
 	size_t len = this->inf.w*this->inf.h*this->inf.bpp;
 	unsigned char* data = (unsigned char*)malloc(len);
 	GetBitmapBits(b,len,data);
 	DeleteObject(b);
 	return data;
+	
 
 	/*
 	Method 2.

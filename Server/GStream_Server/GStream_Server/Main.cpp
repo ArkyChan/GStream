@@ -3,6 +3,9 @@
 #include <tchar.h>
 #include <conio.h>
 #include <strsafe.h>
+
+#include "vid_Encode.h"
+
 //#define DEBUG
 
 using namespace std;
@@ -23,8 +26,15 @@ void progress(){
 	}
 }
 
+void vidTest();
+
 #define TESTRUNS 500
 int main() {
+
+	vidTest();
+	cin.ignore(2);
+	return 0;
+
 	//Sleep(5000);
 	unsigned int timeBefore = clock();
 	unsigned int times[TESTRUNS];
@@ -83,4 +93,23 @@ int main() {
 
 	//capScreen(0, 0, 720, 640);
 	cin.ignore(2);
+}
+
+void vidTest()
+{
+	s = new ScreenCapture(GetForegroundWindow());
+
+	cout << "Vid start" << endl;
+	vid_prep(1280, 720);
+	cout << "Encodeing frames" << endl;
+
+	// Encode 5 seconds of captures
+	for (int i = 0; i < 30*5; i++)
+	{
+		s->screenCapture(s->rgbFrame);
+		vid_writeFrame((uint8_t*)s->rgbFrame->getRGBInt());
+	}
+
+	vid_end();
+	cout << "Done" << endl;
 }

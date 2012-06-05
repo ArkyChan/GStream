@@ -36,6 +36,9 @@
     <ClCompile Include="glCap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vid_Encode.cpp">
+      <Filter>Source Files\Video</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScreenCapture.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NetworkMain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vid_Encode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -44,6 +44,21 @@ public:
 		return this->data;
 	}
 
+	// Gets the data as a single dim int array (rgb is stored in the int)
+	int* getRGBInt()
+	{
+		char* d = (char*)data;
+		int* buff = new int[w*h];
+
+		for(int i=0; i<w*h; i++)
+		{
+			buff[i] = d[0] << 16 | d[1] << 8 | d[2];
+			d += 3;
+		}
+
+		return buff;
+	}
+
 	void writeRaw(char* file) {
 		FILE *pFile;
 		fopen_s(&pFile,file,"wb");

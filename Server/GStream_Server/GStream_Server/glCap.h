@@ -25,7 +25,7 @@ public:
 protected:
 	void GenerateTexture();
 	bool LoadTGA(char *filename);
-	bool WriteTGA(char *file, short int width, short int height, unsigned char *image);
+	bool WriteTGA(char *file, short int width, short int height, unsigned char* image=NULL);
 	bool textureExist;
 	int type;
 };

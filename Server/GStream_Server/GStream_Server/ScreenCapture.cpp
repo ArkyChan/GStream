@@ -18,23 +18,21 @@ ScreenCapture::ScreenCapture(HWND handle) {
 	SaveToFile(capScreen(this->inf),"image.bmp");
 
 	/*
-	 * codec settings
-	 */
+	* codec settings
+	*/
 	this->res = vpx_codec_enc_config_default(iface, &this->cfg, 0);
 	cfg.rc_target_bitrate = this->inf.w * this->inf.h * cfg.rc_target_bitrate  / cfg.g_w / cfg.g_h;
-    cfg.g_w = this->inf.w;
-    cfg.g_h = this->inf.h;
+	cfg.g_w = this->inf.w;
+	cfg.g_h = this->inf.h;
 	//init codec
 	if(vpx_codec_enc_init(&codec, iface, &cfg, 0))
 		die_codec(&codec,"Failed to initalize codec");
 }
 
 // Capture the screen, returns a bitmap
-HBITMAP ScreenCapture::capScreen(winInfo info)
-{
+HBITMAP ScreenCapture::capScreen(winInfo info){
 	this->hDC = GetDC(info.handle); // get the desktop device context
 	this->hDest = CreateCompatibleDC(this->hDC); // create a device context to use yourself
-
 	// create a bitmap
 	HBITMAP hbDesktop = CreateCompatibleBitmap(this->hDC, info.w, info.h);
 
@@ -45,7 +43,7 @@ HBITMAP ScreenCapture::capScreen(winInfo info)
 	BitBlt( this->hDest, info.x, info.y, info.w, info.h, this->hDC, 0, 0, SRCCOPY | BLACKNESS);
 
 	DeleteDC(this->hDest);
-	ReleaseDC(0,this->hDC);
+	//ReleaseDC(0,this->hDC);
 	return hbDesktop;
 }
 
@@ -90,6 +88,17 @@ winInfo ScreenCapture::hwndTowinInfo(HWND handle)
 		info.y = 0;
 		info.h = GetSystemMetrics(SM_CYVIRTUALSCREEN);
 		info.w = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+		int wBitCount;
+		int iBits = GetDeviceCaps(this->hDC, BITSPIXEL) * GetDeviceCaps(this->hDC, PLANES);
+		if (iBits <= 1)
+			wBitCount = 1;
+		else if (iBits <= 4)
+			wBitCount = 4;
+		else if (iBits <= 8)
+			wBitCount = 8;
+		else
+			wBitCount = 24;
+		info.bpp = wBitCount/8;
 	}
 	else
 	{
@@ -110,12 +119,68 @@ winInfo ScreenCapture::hwndTowinInfo(HWND handle)
 
 unsigned char* ScreenCapture::screenCapture(){
 	HBITMAP b = capScreen(this->inf);
-	size_t len = this->inf.w*this->inf.h*3;
+	size_t len = this->inf.w*this->inf.h*this->inf.bpp;
 	unsigned char* data = (unsigned char*)malloc(len);
 	GetBitmapBits(b,len,data);
 	DeleteObject(b);
 	return data;
+
+	/*
+	Method 2.
+	HBITMAP b = capScreen(this->inf);
+	BITMAPINFO  bmi;
+	memset(&bmi, 0, sizeof(BITMAPINFO));
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	if(0 == GetDIBits(this->hDC, b, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)){
+	std::cout << "Failed to get BITMAPINFO" << std::endl;
+	return 0;
+	}
+	unsigned char* data = (unsigned char*)malloc(this->inf.w*this->inf.h*this->inf.bpp);
+	if(bmi.bmiHeader.biBitCount <= 8){
+	GetDIBits(this->hDC,b,0,bmi.bmiHeader.biHeight,data,&bmi,DIB_RGB_COLORS);
+	}
+	else{
+	GetBitmapBits(b,this->inf.w*this->inf.h*this->inf.bpp,data);
+	}
+	return data;*/
+
+	/*
+	Method 3.
+	unsigned char* data = (unsigned char*)malloc(this->inf.w*this->inf.h*this->inf.bpp);
+	GetObject(capScreen(this->inf),this->inf.w*this->inf.h*this->inf.bpp,data);
+	return data;*/
+
+	/*
+	Method 4
+	HBITMAP b = capScreen(this->inf);
+	size_t size = this->inf.w*this->inf.h*this->inf.bpp;
+	BITMAPINFO  bmi;
+	memset(&bmi, 0, sizeof(BITMAPINFO));
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	if(0 == GetDIBits(GetDC(0), b, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)){
+	std::cout << "Failed to get BITMAPINFO" << std::endl;
+	return 0;
+	}
+	VOID** data = 0;
+	BITMAP bm;
+	if(0 == CreateDIBSection(this->hDC,&bmi,DIB_RGB_COLORS,data,0,bmi.bmiHeader.biSize)){
+	std::cout << "System error: " << GetLastError() << std::endl;
+	}
+	if(!GetObject(b,sizeof(BITMAP), &bm)){
+	std::cout << "Could not load image" << std::endl;
+	}else {
+	return (unsigned char*)bm.bmBits;
+	}*/
+	/*
+	size_t size = this->inf.w*this->inf.h*this->inf.bpp;
+	this->hDC = GetDC(this->inf.handle);
+	this->hDest = CreateCompatibleDC(this->hDC);
+	HBITMAP hbDesktop = CreateCompatibleBitmap(this->hDC, this->inf.w, this->inf.h);
+	BITMAP bmpScreen;
+	GetObject(hbDesktop,sizeof(BITMAP),&bmpScreen);   
+	return (unsigned char*)bmpScreen.bmBits;*/
 }
+
 // Save a bit map to disk
 BOOL ScreenCapture::SaveToFile(HBITMAP hBitmap, LPCTSTR lpszFileName)
 {

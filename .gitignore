@@ -1,2 +1,3 @@
 *.sdf
 *.ipch
+Server\GStream_Server\GStream_Server\Release\*

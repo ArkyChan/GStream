@@ -69,7 +69,7 @@ bool glCap::LoadTGA(char* file)
 
 
 	// Open the image and read in binary mode.
-	pfile = fopen(file, "rb");
+	fopen_s(&pfile,file, "rb");
 
 	// check if the file opened.
 	if (!pfile)
@@ -173,7 +173,7 @@ bool glCap::WriteTGA(char *file, short int width, short int height, unsigned cha
 	unsigned char tempColors;
 
 	// Open file for output.
-	pFile = fopen(file, "wb");
+	fopen_s(&pFile,file, "wb");
 
 	// Check if the file opened or not.
 	if(!pFile) { fclose(pFile); return false; }
@@ -224,24 +224,6 @@ bool glCap::WriteTGA(char *file, short int width, short int height, unsigned cha
 	fclose(pFile);
 
 	return true;
-}
-
-void glCap::writeRaw(char* file,int x,int y,short bpp,unsigned char* data=NULL){
-	FILE *pFile;
-	fopen_s(&pFile,file,"wb");
-	/*char e = '\0',major='1',minor='0',one='1',max='\xFF';
-	char id[] = {'R','P','I','X'};
-	int len = 28;
-	fwrite(&id,4,1,pFile);//identifer rpix
-	fwrite(&len,sizeof(int),1,pFile); //length of header
-	fwrite(&major,sizeof(char),1,pFile);
-	fwrite(&minor,sizeof(char),1,pFile);
-	fwrite(&x,sizeof(int),1,pFile);
-	fwrite(&y,sizeof(int),1,pFile);
-	fwrite(&one,sizeof(char),8,pFile);
-	fwrite(&e,sizeof(char),8,pFile);*/
-	fwrite((data==NULL ? this->capScreen(x,y) : data),x*y*bpp,1,pFile);
-	fclose(pFile);
 }
 
 // This will save a screen shot to a file.

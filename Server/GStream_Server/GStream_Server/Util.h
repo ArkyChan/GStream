@@ -9,22 +9,22 @@
 	u=(unsigned char)(((int)(-17*r) - (int)(33*g) + (int)(50*b)+12800)/100); \
 	v=(unsigned char)(((int)(50*r) - (int)(42*g) - (int)(8*b)+12800)/100)
 
-static void RGBtoYUV420PSameSize (const unsigned char * rgb,unsigned char * yuv,unsigned rgbIncrement,unsigned char flip,int srcFrameWidth, int srcFrameHeight)	{
+static void RGBtoYUV420PSameSize (const unsigned char* rgb,unsigned char* yuv,unsigned rgbIncrement,unsigned char flip,int srcFrameWidth, int srcFrameHeight)	{
 	if(rgb==0)
 		return;
 
 	unsigned int planeSize;
 	unsigned int halfWidth;
 
-	unsigned char * yplane;
-	unsigned char * uplane;
-	unsigned char * vplane;
-	const unsigned char * rgbIndex;
+	unsigned char* yplane;
+	unsigned char* uplane;
+	unsigned char* vplane;
+	const unsigned char* rgbIndex;
 
 	int x, y;
-	unsigned char * yline;
-	unsigned char * uline;
-	unsigned char * vline;
+	unsigned char* yline;
+	unsigned char* uline;
+	unsigned char* vline;
 
 	planeSize = srcFrameWidth * srcFrameHeight;
 	halfWidth = srcFrameWidth >> 1;

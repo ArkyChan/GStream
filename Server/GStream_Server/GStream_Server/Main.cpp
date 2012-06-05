@@ -43,35 +43,29 @@ int main() {
 	for (int i = 0; i < TESTRUNS; i++)
 	{
 		timeBefore = clock();
+		s->screenCapture(s->rgbFrame);
 
-		//res = s->p_frame();
-		unsigned char* nData = (unsigned char*)malloc(1920*1080*4);
-		unsigned char* data = s->screenCapture();
-
-		cout << "Data location: " << &data << endl;
-		cout << "Bytes per pixel: " << s->inf.bpp << endl;
-		s->gcap.writeRaw("test.bitmap.data",1920,1080,s->inf.bpp,NULL);
-		s->gcap.writeRaw("test.data",1920,1080,s->inf.bpp,data);
-		RGBtoYUV420PSameSize(data,nData,3,0,1920,1080);
+		/*
+		s->lastFrame->writeRaw("test.data");
+		RGBtoYUV420PSameSize(s->lastFrame->getData(),nData,s->inf.bpp,0,s->inf.w,s->inf.h);
 		vpx_image_t* img = (vpx_image_t*)nData;
-		s->gcap.writeRaw("test.yuv.data",1920,1080,4,nData);
+		s->gcap.writeRaw("test.yuv.data",s->inf.w,s->inf.h,4,nData);
 
 		if(vpx_codec_encode(&s->codec,img,s->frame_cnt,1,0,VPX_DL_REALTIME)==0){
-			s->pkt = vpx_codec_get_cx_data(&s->codec, &s->iter);
-			res = s->pkt->data.frame.sz;
+		s->pkt = vpx_codec_get_cx_data(&s->codec, &s->iter);
+		res = s->pkt->data.frame.sz;
 		}else {
-			ScreenCapture::die_codec(&s->codec,"Failed encode frame");
-			cin.ignore();
-			return 0;
+		ScreenCapture::die_codec(&s->codec,"Failed encode frame");
+		cin.ignore();
+		return 0;
 		}
+		*/
 
 		times[i] = (clock() - timeBefore);
 		fps++;
-		/*char str[20];
-		sprintf_s(str,"image%i.bmp",i);
-		s->snap(str);*/
 		//cout << res << endl;
 	}
+	s->rgbFrame->writeRaw("test.data");
 
 	unsigned int sum=0,min=INT_MAX,max=0;
 	for (int i = 0; i < TESTRUNS; i++)

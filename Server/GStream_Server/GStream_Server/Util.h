@@ -10,6 +10,9 @@
 	v=(unsigned char)(((int)(50*r) - (int)(42*g) - (int)(8*b)+12800)/100)
 
 static void RGBtoYUV420PSameSize (const unsigned char * rgb,unsigned char * yuv,unsigned rgbIncrement,unsigned char flip,int srcFrameWidth, int srcFrameHeight)	{
+	if(rgb==0)
+		return;
+
 	unsigned int planeSize;
 	unsigned int halfWidth;
 
@@ -54,4 +57,6 @@ static void RGBtoYUV420PSameSize (const unsigned char * rgb,unsigned char * yuv,
 		}
 	}
 }
+
 #endif
+

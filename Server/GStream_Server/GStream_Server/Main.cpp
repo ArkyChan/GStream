@@ -45,13 +45,16 @@ int main() {
 		timeBefore = clock();
 
 		//res = s->p_frame();
-		unsigned char* nData = (unsigned char*)malloc(1920*1080*3);
+		unsigned char* nData = (unsigned char*)malloc(1920*1080*4);
 		unsigned char* data = s->screenCapture();
 
-		s->gcap.writeRaw("test.rgb.raw",1920,1080,4,data);
-		RGBtoYUV420PSameSize(data,nData,1,0,1920,1080);
+		cout << "Data location: " << &data << endl;
+		cout << "Bytes per pixel: " << s->inf.bpp << endl;
+		s->gcap.writeRaw("test.bitmap.data",1920,1080,s->inf.bpp,NULL);
+		s->gcap.writeRaw("test.data",1920,1080,s->inf.bpp,data);
+		RGBtoYUV420PSameSize(data,nData,3,0,1920,1080);
 		vpx_image_t* img = (vpx_image_t*)nData;
-		s->gcap.writeRaw("test.yuv.raw",1920,1080,3,nData);
+		s->gcap.writeRaw("test.yuv.data",1920,1080,4,nData);
 
 		if(vpx_codec_encode(&s->codec,img,s->frame_cnt,1,0,VPX_DL_REALTIME)==0){
 			s->pkt = vpx_codec_get_cx_data(&s->codec, &s->iter);
@@ -67,7 +70,7 @@ int main() {
 		/*char str[20];
 		sprintf_s(str,"image%i.bmp",i);
 		s->snap(str);*/
-		cout << res << endl;
+		//cout << res << endl;
 	}
 
 	unsigned int sum=0,min=INT_MAX,max=0;

@@ -1,12 +1,12 @@
 #include "ScreenCapture.h"
+
 #include "boost\thread.hpp"
 #include <tchar.h>
 #include <conio.h>
 #include <strsafe.h>
 #include "NetworkMain.h"
-
 #include "vid_Encode.h"
-
+#include "Logger.h"
 //#define DEBUG
 
 using namespace std;
@@ -31,7 +31,7 @@ void vidTest();
 
 #define TESTRUNS 500
 int main() {
-
+	_LOG("Server start.",_INFO);
 	net_startServer(0);
 	//vidTest();
 	cin.ignore(2);

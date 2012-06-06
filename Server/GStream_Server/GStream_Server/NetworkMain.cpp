@@ -13,7 +13,7 @@ FuncPointer net_packetFuncs[];
 void net_startServer(int port)
 {
 	// Just tests for now
-
+	_LOG("Networking setup.",_INFO);
 	// Gotta call em all
 	for (int i = 0; i < PCK_ID_COUNT; i++)
 		net_packetFuncs[i]();

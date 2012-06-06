@@ -10,6 +10,6 @@
 
 ###Dependencies:
 We require the following libraries to compile.
-* FFmpeg.
-* Boost.
-* VPX (redunt at this stage and will msot likey get removed, why am iI writing this then) maybe I shouldn't add to this :p
+* 	FFmpeg.
+* 	Boost.
+* 	VPX (redundent at this stage and will most likey get removed, why am I writing this then) maybe I shouldn't add to this :p

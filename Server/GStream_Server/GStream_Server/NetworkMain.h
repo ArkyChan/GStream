@@ -2,7 +2,7 @@
 #define NETWORKMAIN_H
 
 typedef void(*FuncPointer)();
-
+#include "Logger.h"
 // Numer of packet ids 
 #define PCK_ID_COUNT PID_COUNT-1
 

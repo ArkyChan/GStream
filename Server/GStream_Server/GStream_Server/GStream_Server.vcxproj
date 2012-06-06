@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClInclude Include="Frame.h" />
     <ClInclude Include="glCap.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="NetworkMain.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScreenCapture.h" />

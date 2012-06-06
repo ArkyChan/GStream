@@ -25,9 +25,6 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{b9aa3ed4-bf90-490c-873e-d0e71764c2da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Packets">
-      <UniqueIdentifier>{0ee9554e-f4e0-4e38-b17d-8aeb11f79667}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\net">
       <UniqueIdentifier>{394074d1-8764-4cd2-a198-9e8f693f4e9b}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,12 @@
     <ClCompile Include="ScreenCapture.cpp">
       <Filter>Source Files\Video</Filter>
     </ClCompile>
+    <ClCompile Include="TCP_Layer.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="tcp_connection.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -68,16 +71,7 @@
     <ClInclude Include="Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Packet0.h">
-      <Filter>Header Files\Packets</Filter>
-    </ClInclude>
-    <ClInclude Include="Packet1.h">
-      <Filter>Header Files\Packets</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkMain.h">
-      <Filter>Header Files\net</Filter>
-    </ClInclude>
-    <ClInclude Include="Packet.h">
       <Filter>Header Files\net</Filter>
     </ClInclude>
     <ClInclude Include="tcp_connection.h">

@@ -10,39 +10,34 @@
 FuncPointer net_packetFuncs[];
 
 // Start the Server
-void NetworkMain::net_startServer(int port){
+void net_startServer(int port){
 	// Just tests for now
 	_LOG("Networking setup.",_INFO);
+
+	//thread a new tcp server
+	_LOG("Starting TCP server.",_INFO);
+
+	try{
+		//server = new Gstream::TcpServer("0.0.0.0",DEFUALT_PORT);
+		//server->run();
+	}
+	catch (std::exception& e){
+		std::cout << e.what() << std::endl;
+		_LOG("Tcp server failed to start!",_ERROR);
+	}
+	_LOG("TCP server started.",_INFO);
+
 	// Gotta call em all
 	for (int i = 0; i < PCK_ID_COUNT; i++)
 		net_packetFuncs[i]();
-
-	//thread a new tcp server
-	startTCP();
 }
 
 // Clled when a packet is recived
-void onPacketRecived()
-{
+void onPacketRecived(){
 
-}
-
-void NetworkMain::startTCP(){
-	_LOG("Starting TCP layer IO service.",_INFO);
-	try{
-		IO_SERVICE io_service;
-		this->tcp = new TcpLayer(io_service);
-		IO_SERVICE::work work(io_service);
-		this->threadPool.create_thread([&](){io_service.run();});
-	}
-	catch (std::exception& e){
-		_LOG(e.what(),_ERROR);
-	}
-	_LOG("TCP IO service started.",_INFO);
 }
 // Shut down the server
-void NetworkMain::net_stopServer()
-{
+void net_stopServer(){
 
 }
 
@@ -50,26 +45,22 @@ void NetworkMain::net_stopServer()
 //===========================
 
 // Get the time taken to send data to the client
-void net_onPing()
-{
+void net_onPing(){
 	std::cout << "onPing" << std::endl;
 }
 
 // Get the clients ip and ports, returns any other ports this server is using
-void net_onHandshake()
-{
+void net_onHandshake(){
 	std::cout << "net_onhandshake" << std::endl;
 }
 
 // Set the position of the mouse
-void net_onMousepos()
-{
+void net_onMousepos(){
 	std::cout << "net_onMousepos" << std::endl;
 }
 
 // Simulates the keypress of the key with the given id
-void net_onKeypress()
-{
+void net_onKeypress(){
 	std::cout << "net_onKeypress" << std::endl;
 }
 
@@ -78,8 +69,7 @@ void net_onKeypress()
 
 // Bind the functions to their IDs
 //===========================
-FuncPointer net_packetFuncs[PCK_ID_COUNT] =
-{
+FuncPointer net_packetFuncs[PCK_ID_COUNT] = {
 	net_onPing,
 	net_onHandshake,
 	net_onMousepos,

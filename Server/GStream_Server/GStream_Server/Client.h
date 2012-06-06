@@ -1,18 +1,19 @@
 #ifndef CLIENT_H
 #define CLIENT_H
+namespace Gstream{
+	class Client {
+	public:
+		Client(SOCK*){
 
-class Client {
-public:
-	Client(SOCK*){
-		
-	}
-	bool start(){
-		
-	}
-	bool sendPacket(Packet* p){
-		
-	}
-private:
-	SOCK* sock;
-};
+		}
+		bool start(){
+
+		}
+		bool sendPacket(){
+
+		}
+	private:
+		SOCK* sock;
+	};
+}
 #endif

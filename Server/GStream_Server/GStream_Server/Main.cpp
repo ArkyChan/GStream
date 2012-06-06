@@ -2,7 +2,6 @@
 
 #include "ScreenCapture.h"
 
-#include "boost\thread.hpp"
 #include <tchar.h>
 #include <conio.h>
 #include <strsafe.h>
@@ -15,7 +14,6 @@ using namespace std;
 
 int fps = 0;
 ScreenCapture *s;
-NetworkMain* net;
 
 void progress(){
 	while(true){
@@ -34,8 +32,7 @@ void vidTest();
 #define TESTRUNS 500
 int main() {
 	_LOG("Server start.",_INFO);
-	net = new NetworkMain();
-	net->net_startServer(0);
+	net_startServer(0);
 
 	//vidTest();
 	cin.ignore(2);
@@ -115,7 +112,7 @@ void vidTest()
 		s->screenCapture(s->rgbFrame);
 		vid_writeFrame((uint8_t*)s->rgbFrame->getData(),s->inf.w*s->inf.h*3);
 	}
-	
+
 	vid_end();
 	cout << "Done" << endl;
 }

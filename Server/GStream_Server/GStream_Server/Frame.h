@@ -52,7 +52,7 @@ public:
 
 		for(int i=0; i<w*h; i++)
 		{
-			buff[i] = d[0] << 16 | d[1] << 8 | d[2];
+			buff[i] = d[2] << 16 | d[1] << 8 | d[0];
 			d += 3;
 		}
 

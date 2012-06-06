@@ -1,3 +1,5 @@
+#define WIN32_LEAN_AND_MEAN
+
 #include "ScreenCapture.h"
 
 #include "boost\thread.hpp"
@@ -10,10 +12,10 @@
 //#define DEBUG
 
 using namespace std;
-#define WIN32_LEAN_AND_MEAN
 
 int fps = 0;
 ScreenCapture *s;
+NetworkMain* net;
 
 void progress(){
 	while(true){
@@ -32,7 +34,9 @@ void vidTest();
 #define TESTRUNS 500
 int main() {
 	_LOG("Server start.",_INFO);
-	net_startServer(0);
+	net = new NetworkMain();
+	net->net_startServer(0);
+
 	//vidTest();
 	cin.ignore(2);
 	return 0;

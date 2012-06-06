@@ -25,15 +25,18 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{b9aa3ed4-bf90-490c-873e-d0e71764c2da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Packets">
+      <UniqueIdentifier>{0ee9554e-f4e0-4e38-b17d-8aeb11f79667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\net">
+      <UniqueIdentifier>{394074d1-8764-4cd2-a198-9e8f693f4e9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Video">
+      <UniqueIdentifier>{f1006ce8-8b15-4dfd-a141-be544e1b1ecc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScreenCapture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="glCap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vid_Encode.cpp">
@@ -42,30 +45,57 @@
     <ClCompile Include="NetworkMain.cpp">
       <Filter>Source Files\net</Filter>
     </ClCompile>
+    <ClCompile Include="TCP_layer.h">
+      <Filter>Header Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="glCap.cpp">
+      <Filter>Source Files\Video</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenCapture.cpp">
+      <Filter>Source Files\Video</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ScreenCapture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Frame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="glCap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkMain.h">
+    <ClInclude Include="Logger.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet0.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet1.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkMain.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="tcp_connection.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame.h">
+      <Filter>Header Files\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="glCap.h">
+      <Filter>Header Files\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenCapture.h">
+      <Filter>Header Files\Video</Filter>
     </ClInclude>
     <ClInclude Include="vid_Encode.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Video</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
+    <ClInclude Include="BoostMacro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

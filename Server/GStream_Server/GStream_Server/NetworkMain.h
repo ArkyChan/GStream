@@ -3,6 +3,8 @@
 
 typedef void(*FuncPointer)();
 #include "Logger.h"
+#include "TCP_layer.h"
+
 // Numer of packet ids 
 #define PCK_ID_COUNT PID_COUNT-1
 
@@ -17,10 +19,15 @@ enum packetID
 	PID_COUNT // How many ids are their :o , make sure its the lat one
 };
 
-// Start the network server
-void net_startServer(int port);
+class NetworkMain {
+public:
+	void net_startServer(int port);
+	void net_stopServer();
+private:
+	void startTCP();
 
-// Stop the server
-void net_stopServer();
+	TcpLayer* tcp;
+	boost::thread_group threadPool;
+};
 
 #endif

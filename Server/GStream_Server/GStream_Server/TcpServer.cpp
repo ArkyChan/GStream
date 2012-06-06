@@ -1,4 +1,4 @@
-#include "TCP_layer.h"
+#include "TcpServer.h"
 
 namespace Gstream {
 	TcpServer::TcpServer(const std::string& address, const std::string& port) : signals_(io_service_), acceptor_(io_service_), new_connection_(io_service_) {
@@ -33,7 +33,7 @@ namespace Gstream {
 
 	void TcpServer::start_accept()
 	{
-		tcp_connection new_connection_(io_service_);
+		TcpConnection new_connection_(io_service_);
 		acceptor_.async_accept(new_connection_.socket(),BIND(&TcpServer::handle_accept, this,PLACEHOLDER::error));
 	}
 

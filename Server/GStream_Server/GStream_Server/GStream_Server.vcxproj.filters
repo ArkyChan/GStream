@@ -42,19 +42,19 @@
     <ClCompile Include="NetworkMain.cpp">
       <Filter>Source Files\net</Filter>
     </ClCompile>
-    <ClCompile Include="TCP_layer.h">
-      <Filter>Header Files\net</Filter>
-    </ClCompile>
     <ClCompile Include="glCap.cpp">
       <Filter>Source Files\Video</Filter>
     </ClCompile>
     <ClCompile Include="ScreenCapture.cpp">
       <Filter>Source Files\Video</Filter>
     </ClCompile>
-    <ClCompile Include="TCP_Layer.cpp">
+    <ClCompile Include="TcpServer.h">
+      <Filter>Header Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpServer.cpp">
       <Filter>Source Files\net</Filter>
     </ClCompile>
-    <ClCompile Include="tcp_connection.cpp">
+    <ClCompile Include="TcpConnection.cpp">
       <Filter>Source Files\net</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,9 +74,6 @@
     <ClInclude Include="NetworkMain.h">
       <Filter>Header Files\net</Filter>
     </ClInclude>
-    <ClInclude Include="tcp_connection.h">
-      <Filter>Header Files\net</Filter>
-    </ClInclude>
     <ClInclude Include="Frame.h">
       <Filter>Header Files\Video</Filter>
     </ClInclude>
@@ -91,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="BoostMacro.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpConnection.h">
+      <Filter>Header Files\net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

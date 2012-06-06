@@ -1,5 +1,5 @@
-#ifndef TCP_CONNECTION
-#define TCP_CONNECTION
+#ifndef TCPCONNECTION_H
+#define TCPCONNECTION_H
 
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
@@ -10,11 +10,12 @@
 #include <boost/thread.hpp>
 
 #include "BoostMacro.h"
+
 namespace Gstream {
 	/// Represents a single connection from a client.
-	class tcp_connection : public ENABLE_SHARED<tcp_connection>,  private boost::noncopyable {
+	class TcpConnection : public ENABLE_SHARED<TcpConnection>,  private boost::noncopyable {
 	public:
-		explicit tcp_connection(IO_SERVICE& io_service);
+		explicit TcpConnection(IO_SERVICE& io_service);
 		SOCK& socket();
 		void start();
 
@@ -26,6 +27,6 @@ namespace Gstream {
 		boost::array<char, 8192> buffer_;
 	};
 
-	typedef boost::shared_ptr<tcp_connection> connection_ptr;
+	typedef boost::shared_ptr<TcpConnection> connection_ptr;
 }
 #endif

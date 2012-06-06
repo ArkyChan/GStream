@@ -1,7 +1,7 @@
 #ifndef NETWORKMAIN_H
 #define NETWORKMAIN_H
 
-#include "TCP_layer.h"
+#include "TcpServer.h"
 
 #define DEFUALT_PORT "1337"
 

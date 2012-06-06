@@ -1,7 +1,7 @@
-#ifndef TCP_LAYER
-#define TCP_LAYER
+#ifndef TCPSERVER_H
+#define TCPSERVER_H
 
-#include "tcp_connection.h"
+#include "TcpConnection.h"
 #include "Logger.h"
 #include "BoostMacro.h"
 
@@ -17,7 +17,7 @@ namespace Gstream{
 		IO_SERVICE io_service_;
 		ASIO::signal_set signals_;
 		TCP::acceptor acceptor_;
-		tcp_connection new_connection_;
+		TcpConnection new_connection_;
 	};
 }
 #endif

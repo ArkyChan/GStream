@@ -3,6 +3,7 @@
 #include <tchar.h>
 #include <conio.h>
 #include <strsafe.h>
+#include "NetworkMain.h"
 
 #include "vid_Encode.h"
 
@@ -31,7 +32,8 @@ void vidTest();
 #define TESTRUNS 500
 int main() {
 
-	vidTest();
+	net_startServer(0);
+	//vidTest();
 	cin.ignore(2);
 	return 0;
 
@@ -109,7 +111,7 @@ void vidTest()
 		s->screenCapture(s->rgbFrame);
 		vid_writeFrame((uint8_t*)s->rgbFrame->getRGBInt());
 	}
-
+	
 	vid_end();
 	cout << "Done" << endl;
 }

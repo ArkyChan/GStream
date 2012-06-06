@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="glCap.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NetworkMain.cpp" />
     <ClCompile Include="ScreenCapture.cpp" />
     <ClCompile Include="vid_Encode.cpp" />
   </ItemGroup>

@@ -53,7 +53,7 @@ void vid_prep(int width, int height)
     picture = avcodec_alloc_frame();
 
     /* put sample parameters */
-    c->bit_rate = 400000;
+    c->bit_rate = 2000;
     /* resolution must be a multiple of two */
     c->width = width;
     c->height = height;
@@ -93,40 +93,57 @@ void vid_prep(int width, int height)
 
 }
 
+static int frameNum = 0;
 // Write a frame
 void vid_writeFrame(uint8_t* imgData)
 {
-	AVFrame* outpic = avcodec_alloc_frame();
-    int nbytes = avpicture_get_size(PIX_FMT_YUV420P, c->width, c->height);
+int in_width, in_height, out_width, out_height;
+in_width = out_width = vWidth;
+in_height = out_height = vHeight;
 
-    //create buffer for the output image
-    uint8_t* outbuffer = (uint8_t*)av_malloc(nbytes);
+//here, make sure inbuffer points to the input BGR32 data, 
+//and the input and output dimensions are set correctly.
 
-	avpicture_fill((AVPicture*)picture, imgData, PIX_FMT_RGB8, c->width, c->height);
-    avpicture_fill((AVPicture*)outpic, outbuffer, PIX_FMT_YUV420P, c->width, c->height);
+//calculate the bytes needed for the output image
+int nbytes = avpicture_get_size(PIX_FMT_YUV420P, out_width, out_height);
 
+//create buffer for the output image
+uint8_t* outbuffer = (uint8_t*)av_malloc(nbytes);
 
-	SwsContext* img_convert_ctx = sws_getContext(vWidth, vHeight, 
-                        PIX_FMT_RGB24, 
-                        vWidth, vHeight, PIX_FMT_YUV420P, SWS_BICUBIC, 
-                        NULL, NULL, NULL);
+//create ffmpeg frame structures.  These do not allocate space for image data, 
+//just the pointers and other information about the image.
+AVFrame* inpic = avcodec_alloc_frame();
+AVFrame* outpic = avcodec_alloc_frame();
 
-	sws_scale(img_convert_ctx, picture->data, picture->linesize, 0, c->height, outpic->data, outpic->linesize);
+//this will set the pointers in the frame structures to the right points in 
+//the input and output buffers.
+avpicture_fill((AVPicture*)inpic, imgData, PIX_FMT_RGB32, in_width, in_height);
+avpicture_fill((AVPicture*)outpic, outbuffer, PIX_FMT_YUV420P, out_width, out_height);
 
-	out_size = avcodec_encode_video(c, outbuf, outbuf_size, picture);
-	had_output |= out_size;
-	printf("encoding frame %3d (size=%5d)\n", i, out_size);
-	fwrite(outbuf, 1, out_size, vidFile);
+//create the conversion context
+SwsContext* fooContext = sws_getContext(in_width, in_height, PIX_FMT_RGB32, out_width, out_height, PIX_FMT_YUV420P, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+
+//perform the conversion
+sws_scale(fooContext, inpic->data, inpic->linesize, 0, in_height, outpic->data, outpic->linesize);
+
+	outpic->pts = (frameNum*33)*90;
+
+		out_size = avcodec_encode_video(c, outbuf, outbuf_size, outpic);
+		had_output |= out_size;
+		printf("encoding frame %3d (size=%5d)\n", i, out_size);
+		fwrite(outbuf, 1, out_size, vidFile);
 
 	for(; out_size || !had_output; i++) 
 	{
         fflush(stdout);
 
-        out_size = avcodec_encode_video(c, outbuf, outbuf_size, NULL);
+        out_size = avcodec_encode_video(c, outbuf, outbuf_size, picture);
         had_output |= out_size;
         printf("write frame %3d (size=%5d)\n", i, out_size);
         fwrite(outbuf, 1, out_size, vidFile);
     }
+
+	frameNum++;
 }
 
 // Dummy vide data

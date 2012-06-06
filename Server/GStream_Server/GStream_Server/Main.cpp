@@ -109,7 +109,7 @@ void vidTest()
 	for (int i = 0; i < 30*5; i++)
 	{
 		s->screenCapture(s->rgbFrame);
-		vid_writeFrame((uint8_t*)s->rgbFrame->getRGBInt());
+		vid_writeFrame((uint8_t*)s->rgbFrame->getData(),s->inf.w*s->inf.h*3);
 	}
 	
 	vid_end();

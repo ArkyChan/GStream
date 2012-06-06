@@ -12,6 +12,7 @@ extern "C"
 #include <libavutil/mathematics.h>
 #include <libavutil/samplefmt.h>
 #include <libswscale/swscale.h>
+#include <libavformat\avformat.h>
 }
 
 // Note won't work for gcc if we ever swap over, you can make the make file then :p
@@ -19,6 +20,7 @@ extern "C"
 #pragma comment(lib, "avcodec.lib")
 #pragma comment(lib, "avformat.lib")
 #pragma comment(lib, "swscale.lib")
+#define INBUF_SIZE 4096
 
 char filename[128] = "test.h264";
 FILE *vidFile;
@@ -29,7 +31,7 @@ int i, out_size, x, y, outbuf_size;
 int had_output=0;
 AVFrame *picture;
 uint8_t *outbuf;
-
+AVFrame* outpic;
 int vWidth, vHeight;
 
 // Just gonna try and encode it to a file to test
@@ -41,109 +43,83 @@ void vid_prep(int width, int height)
 	// load the codecs, derp I keep forgeting this
 	avcodec_register_all();
 
-    /* find the mpeg1 video encoder */
-    codec = avcodec_find_encoder(CodecID::CODEC_ID_H264);
-    if (!codec) 
+	/* find the mpeg1 video encoder */
+	codec = avcodec_find_encoder(CodecID::CODEC_ID_H264);
+	if (!codec) 
 	{
-        fprintf(stderr, "codec not found\n");
-        exit(1);
-    }
+		fprintf(stderr, "codec not found\n");
+		exit(1);
+	}
 
-    c = avcodec_alloc_context3(codec);
-    picture = avcodec_alloc_frame();
+	c = avcodec_alloc_context3(codec);
+	picture = avcodec_alloc_frame();
 
-    /* put sample parameters */
-    c->bit_rate = 2000;
-    /* resolution must be a multiple of two */
-    c->width = width;
-    c->height = height;
+	/* put sample parameters */
+	c->bit_rate = 200000;
+	/* resolution must be a multiple of two */
+	c->width = width;
+	c->height = height;
 
-    /* frames per second */
+	/* frames per second */
 	AVRational avr;
 	avr.den = 1;
-	avr.num = 30;
-    c->time_base= avr;
-    c->gop_size = 10; /* emit one intra frame every ten frames */
-    c->max_b_frames=1;
-    c->pix_fmt = PIX_FMT_YUV420P;
+	avr.num = 20;
+	c->codec_id = CODEC_ID_H264;
+	c->codec_type = AVMEDIA_TYPE_VIDEO; 
+	c->time_base= avr;
+	c->gop_size = 15; /* emit one intra frame every ten frames */
+	c->max_b_frames=5;
+	c->pix_fmt = PIX_FMT_YUV420P;
 
-    //if(codec_id == CODEC_ID_H264)
-        av_opt_set(c->priv_data, "preset", "slow", 0); // Not a great idea for us
+	//if(codec_id == CODEC_ID_H264)
+	av_opt_set(c->priv_data, "preset", "slow", 0); // Not a great idea for us
 
-    /* open it */
-    if (avcodec_open2(c, codec, NULL) < 0) 
+	/* open it */
+	if (avcodec_open2(c, codec, NULL) < 0) 
 	{
-        fprintf(stderr, "could not open codec\n");
-        exit(1);
-    }
+		fprintf(stderr, "could not open codec\n");
+		exit(1);
+	}
 
-    vidFile = fopen(filename, "wb");
-    if (!vidFile) 
+	vidFile = fopen(filename, "wb");
+	if (!vidFile) 
 	{
-        fprintf(stderr, "could not open %s\n", filename);
-        exit(1);
-    }
+		fprintf(stderr, "could not open %s\n", filename);
+		exit(1);
+	}
 
-    /* alloc image and output buffer */
-    outbuf_size = 100000 + 12*c->width*c->height;
-    outbuf = (uint8_t*)malloc(outbuf_size);
+	/* alloc image and output buffer */
+	outbuf_size = 100000 + 12*c->width*c->height;
+	outbuf = (uint8_t*)av_malloc(outbuf_size);
 
-
-    av_image_alloc(picture->data, picture->linesize, c->width, c->height, c->pix_fmt, 1);
-
+	av_image_alloc(picture->data, picture->linesize, c->width, c->height, c->pix_fmt, 1);
 }
 
-static int frameNum = 0;
 // Write a frame
-void vid_writeFrame(uint8_t* imgData)
+void vid_writeFrame(uint8_t* imgData,size_t size)
 {
-int in_width, in_height, out_width, out_height;
-in_width = out_width = vWidth;
-in_height = out_height = vHeight;
+	outpic = avcodec_alloc_frame();
+	int nbytes = avpicture_get_size(PIX_FMT_YUV420P, c->width, c->height);
 
-//here, make sure inbuffer points to the input BGR32 data, 
-//and the input and output dimensions are set correctly.
+	//create buffer for the output image
+	uint8_t* outbuffer = (uint8_t*)av_malloc(nbytes);
 
-//calculate the bytes needed for the output image
-int nbytes = avpicture_get_size(PIX_FMT_YUV420P, out_width, out_height);
+	avpicture_fill((AVPicture*)picture, imgData, PIX_FMT_BGR24, c->width, c->height);
+	avpicture_fill((AVPicture*)outpic, outbuffer, PIX_FMT_YUV420P, c->width, c->height);
+	SwsContext* img_convert_ctx = sws_getContext(vWidth, vHeight, PIX_FMT_BGR24, vWidth, vHeight, PIX_FMT_YUV420P, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 
-//create buffer for the output image
-uint8_t* outbuffer = (uint8_t*)av_malloc(nbytes);
-
-//create ffmpeg frame structures.  These do not allocate space for image data, 
-//just the pointers and other information about the image.
-AVFrame* inpic = avcodec_alloc_frame();
-AVFrame* outpic = avcodec_alloc_frame();
-
-//this will set the pointers in the frame structures to the right points in 
-//the input and output buffers.
-avpicture_fill((AVPicture*)inpic, imgData, PIX_FMT_RGB32, in_width, in_height);
-avpicture_fill((AVPicture*)outpic, outbuffer, PIX_FMT_YUV420P, out_width, out_height);
-
-//create the conversion context
-SwsContext* fooContext = sws_getContext(in_width, in_height, PIX_FMT_RGB32, out_width, out_height, PIX_FMT_YUV420P, SWS_FAST_BILINEAR, NULL, NULL, NULL);
-
-//perform the conversion
-sws_scale(fooContext, inpic->data, inpic->linesize, 0, in_height, outpic->data, outpic->linesize);
-
-	outpic->pts = (frameNum*33)*90;
-
-		out_size = avcodec_encode_video(c, outbuf, outbuf_size, outpic);
-		had_output |= out_size;
+	sws_scale(img_convert_ctx, picture->data, picture->linesize, 0, c->height, outpic->data, outpic->linesize);
+	picture->width = 1280;
+	outpic->width = 1280;
+	outpic->height = 720;
+	picture->height = 720;
+	out_size = avcodec_encode_video(c, outbuf, outbuf_size, outpic);
+	had_output |= out_size;
+	if(out_size>0){
 		printf("encoding frame %3d (size=%5d)\n", i, out_size);
 		fwrite(outbuf, 1, out_size, vidFile);
+	}
 
-	for(; out_size || !had_output; i++) 
-	{
-        fflush(stdout);
-
-        out_size = avcodec_encode_video(c, outbuf, outbuf_size, picture);
-        had_output |= out_size;
-        printf("write frame %3d (size=%5d)\n", i, out_size);
-        fwrite(outbuf, 1, out_size, vidFile);
-    }
-
-	frameNum++;
 }
 
 // Dummy vide data
@@ -176,35 +152,34 @@ void vid_writeDummyFrames()
 		had_output |= out_size;
 		printf("encoding frame %3d (size=%5d)\n", i, out_size);
 		fwrite(outbuf, 1, out_size, vidFile);
-    }
-
-
-	for(; out_size || !had_output; i++) 
-	{
-        fflush(stdout);
-
-        out_size = avcodec_encode_video(c, outbuf, outbuf_size, NULL);
-        had_output |= out_size;
-        printf("write frame %3d (size=%5d)\n", i, out_size);
-        fwrite(outbuf, 1, out_size, vidFile);
-    }
+	}
 }
 
 // Wrap up the file
 void vid_end()
 {
-	/* add sequence end code to have a real mpeg file */
-    outbuf[0] = 0x00;
-    outbuf[1] = 0x00;
-    outbuf[2] = 0x01;
-    outbuf[3] = 0xb7;
-    fwrite(outbuf, 1, 4, vidFile);
-    fclose(vidFile);
-    free(outbuf);
+	for(; out_size || !had_output; i++) 
+	{
+		fflush(stdout);
 
-    avcodec_close(c);
-    av_free(c);
-    //av_free(picture->data[0]);
-    //av_free(picture);
-    printf("\n");
+		out_size = avcodec_encode_video(c, outbuf, outbuf_size, NULL);
+		had_output |= out_size;
+		printf("write frame %3d (size=%5d)\n", i, out_size);
+		fwrite(outbuf, 1, out_size, vidFile);
+	}
+	
+	/* add sequence end code to have a real mpeg file */
+	outbuf[0] = 0x00;
+	outbuf[1] = 0x00;
+	outbuf[2] = 0x01;
+	outbuf[3] = 0xb7;
+	fwrite(outbuf, 1, 4, vidFile);
+	fclose(vidFile);
+	free(outbuf);
+
+	avcodec_close(c);
+	av_free(c);
+	av_free(picture->data[0]);
+	av_free(picture);
+	printf("\n");
 }

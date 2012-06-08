@@ -8,6 +8,7 @@
 typedef void(*FuncPointer)();
 #include "Logger.h"
 
+using namespace Gstream;
 
 // Numer of packet ids 
 #define PCK_ID_COUNT PID_COUNT-1
@@ -24,5 +25,5 @@ enum packetID{
 
 void net_startServer(int port);
 void net_stopServer();
-Gstream::TcpServer* server;
+
 #endif

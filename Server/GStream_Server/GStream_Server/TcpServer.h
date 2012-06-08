@@ -2,11 +2,10 @@
 #define TCPSERVER_H
 
 #include "TcpConnection.h"
-#include "Logger.h"
 #include "BoostMacro.h"
 
 namespace Gstream{
-	class TcpServer : private boost::noncopyable {
+	class TcpServer : private boost::noncopyable{
 	public:
 		explicit TcpServer(const std::string& address, const std::string& port);
 		void run();

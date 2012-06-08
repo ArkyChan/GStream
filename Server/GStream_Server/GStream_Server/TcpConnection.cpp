@@ -1,4 +1,6 @@
 #include "TcpConnection.h"
+#include <vector>
+#include <boost/bind.hpp>
 
 namespace Gstream {
 	TcpConnection::TcpConnection(IO_SERVICE& io_service) : strand_(io_service), socket_(io_service) {
@@ -9,6 +11,9 @@ namespace Gstream {
 		return socket_;
 	}
 
+	void TcpConnection::reset(SHARED_PTR<TcpConnection>* con){
+		
+	}
 	void TcpConnection::start() {
 		socket_.async_read_some(BUFF(buffer_),strand_.wrap(BIND(&TcpConnection::handle_read, shared_from_this(),PLACEHOLDER::error,PLACEHOLDER::bytes_transferred)));
 	}
@@ -16,7 +21,7 @@ namespace Gstream {
 	void TcpConnection::handle_read(const boost::system::error_code& e, std::size_t bytes_transferred) {
 		if (!e)  {
 			if (bytes_transferred) {
-				//boost::asio::async_write(socket_, 0/*STUFF*/, strand_.wrap(boost::bind(&TcpConnection::handle_write, shared_from_this(), PLACEHOLDER::error)));
+				boost::asio::async_write(socket_, BUFF("Hello"), strand_.wrap(boost::bind(&TcpConnection::handle_write, shared_from_this(), PLACEHOLDER::error)));
 			}
 		}
 	}

@@ -13,12 +13,12 @@
 
 namespace Gstream {
 	/// Represents a single connection from a client.
-	class TcpConnection : public ENABLE_SHARED<TcpConnection>,  private boost::noncopyable {
+	class TcpConnection : public ENABLE_SHARED<TcpConnection>, private boost::noncopyable {
 	public:
 		explicit TcpConnection(IO_SERVICE& io_service);
 		SOCK& socket();
 		void start();
-
+		void reset(SHARED_PTR<TcpConnection>*);
 	private:
 		void handle_read(const boost::system::error_code& e, std::size_t bytes_transferred);
 		void handle_write(const boost::system::error_code& e);
@@ -27,6 +27,6 @@ namespace Gstream {
 		boost::array<char, 8192> buffer_;
 	};
 
-	typedef boost::shared_ptr<TcpConnection> connection_ptr;
+	typedef SHARED_PTR<TcpConnection> connection_ptr;
 }
 #endif

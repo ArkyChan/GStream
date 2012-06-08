@@ -1,4 +1,8 @@
 #include "TcpServer.h"
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace Gstream {
 	TcpServer::TcpServer(const std::string& address, const std::string& port) : signals_(io_service_), acceptor_(io_service_), new_connection_(io_service_) {
@@ -20,8 +24,7 @@ namespace Gstream {
 		start_accept();
 	}
 
-	void TcpServer::run()
-	{
+	void TcpServer::run(){
 		std::vector<boost::shared_ptr<boost::thread> > threads;
 		boost::shared_ptr<boost::thread> thread(new boost::thread(BIND(&IO_SERVICE::run, &io_service_)));
 		threads.push_back(thread);
@@ -31,24 +34,20 @@ namespace Gstream {
 			threads[i]->join();
 	}
 
-	void TcpServer::start_accept()
-	{
-		TcpConnection new_connection_(io_service_);
+	void TcpServer::start_accept()	{
+		//new_connection_.reset(&SHARED_PTR<TcpConnection>(new TcpConnection(io_service_)));
 		acceptor_.async_accept(new_connection_.socket(),BIND(&TcpServer::handle_accept, this,PLACEHOLDER::error));
 	}
 
-	void TcpServer::handle_accept(const boost::system::error_code& e)
-	{
-		if (!e)
-		{
+	void TcpServer::handle_accept(const boost::system::error_code& e)	{
+		if (!e)	{
 			new_connection_.start();
 		}
 
 		start_accept();
 	}
 
-	void TcpServer::handle_stop()
-	{
+	void TcpServer::handle_stop(){
 		io_service_.stop();
 	}
 }

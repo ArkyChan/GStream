@@ -9,5 +9,5 @@
 #define TCP boost::asio::ip::tcp
 #define ASIO boost::asio
 #define BIND boost::bind
-
+#define SHARED_PTR boost::shared_ptr
 #endif

@@ -18,8 +18,10 @@ void net_startServer(int port){
 	_LOG("Starting TCP server.",_INFO);
 
 	try{
-		//server = new Gstream::TcpServer("0.0.0.0",DEFUALT_PORT);
-		//server->run();
+		boost::thread t([&](){
+			TcpServer server("0.0.0.0",DEFUALT_PORT);
+			server.run();
+		});
 	}
 	catch (std::exception& e){
 		std::cout << e.what() << std::endl;

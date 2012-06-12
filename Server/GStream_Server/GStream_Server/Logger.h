@@ -1,11 +1,12 @@
 #ifndef _LOG
 //define the output file name
-#define LOGFILE "log.poop"
+#define LOGFILE "log"
 
 //define log levels
 #define _WARN "[WARN]"
 #define _INFO "[INFO]"
 #define _ERROR "[ERROR]"
+#define _MAKE(str) (str = TEXT("{"+str+"}"))
 
 //check if iostream was included
 #include <iostream>
@@ -20,9 +21,9 @@
 		char* time = ctime(&raw);							\
 		fwrite(time+11,8,1,f);								\
 		fwrite(" ",1,1,f);									\
-		fwrite(lvl,sizeof(lvl)-1,1,f);						\
+		fwrite(lvl,strlen(lvl),1,f);						\
 		fwrite(": ",2,1,f);									\
-		fwrite(msg,sizeof(msg)-1,1,f);						\
+		fwrite(msg,strlen(msg),1,f);						\
 		fwrite("\n",1,1,f);									\
 		fclose(f);											\
 	}														\

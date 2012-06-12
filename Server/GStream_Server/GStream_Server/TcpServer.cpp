@@ -1,11 +1,8 @@
 #include "TcpServer.h"
-#include <boost/thread/thread.hpp>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
-#include <vector>
 
 namespace Gstream {
-	TcpServer::TcpServer(const std::string& address, const std::string& port) : signals_(io_service_), acceptor_(io_service_), new_connection_(io_service_) {
+	TcpServer::TcpServer(const std::string& address, const std::string& port,FuncPointer* callBacks) : signals_(io_service_), acceptor_(io_service_), new_connection_() {
+		func_ptr = callBacks;
 		signals_.add(SIGINT);
 		signals_.add(SIGTERM);
 #if defined(SIGQUIT)
@@ -35,13 +32,13 @@ namespace Gstream {
 	}
 
 	void TcpServer::start_accept()	{
-		//new_connection_.reset(&SHARED_PTR<TcpConnection>(new TcpConnection(io_service_)));
-		acceptor_.async_accept(new_connection_.socket(),BIND(&TcpServer::handle_accept, this,PLACEHOLDER::error));
+		new_connection_.reset(new TcpConnection(io_service_,func_ptr));
+		acceptor_.async_accept(new_connection_->socket(),BIND(&TcpServer::handle_accept, this,PLACEHOLDER::error));
 	}
 
 	void TcpServer::handle_accept(const boost::system::error_code& e)	{
 		if (!e)	{
-			new_connection_.start();
+			new_connection_->start();
 		}
 
 		start_accept();

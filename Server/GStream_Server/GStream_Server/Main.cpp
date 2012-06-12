@@ -37,6 +37,7 @@ int main() {
 	
 	//vidTest();
 	cin.ignore(2);
+	net_stopServer();
 	return 0;
 
 	//Sleep(5000);

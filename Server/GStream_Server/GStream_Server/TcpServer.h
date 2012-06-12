@@ -2,12 +2,11 @@
 #define TCPSERVER_H
 
 #include "TcpConnection.h"
-#include "BoostMacro.h"
 
 namespace Gstream{
 	class TcpServer : private boost::noncopyable{
 	public:
-		explicit TcpServer(const std::string& address, const std::string& port);
+		explicit TcpServer(const std::string& address, const std::string& port,FuncPointer*);
 		void run();
 	private:
 		void start_accept();
@@ -16,7 +15,8 @@ namespace Gstream{
 		IO_SERVICE io_service_;
 		ASIO::signal_set signals_;
 		TCP::acceptor acceptor_;
-		TcpConnection new_connection_;
+		connection_ptr new_connection_;
+		FuncPointer* func_ptr;
 	};
 }
 #endif

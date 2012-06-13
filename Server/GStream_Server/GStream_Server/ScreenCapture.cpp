@@ -83,9 +83,12 @@ winInfo ScreenCapture::hwndTowinInfo(HWND handle){
 	return info;
 }
 
-void ScreenCapture::screenCapture(Frame* f,bool freeLast){
+unsigned char* ScreenCapture::screenCapture(Frame* f,bool freeLast){
+#ifndef HDC_STUFF
+#define HDC_STUFF
 	this->hDC = GetDC(this->inf.handle); //get a handle to our window
 	this->hDest = CreateCompatibleDC(this->hDC); //create a dc to get our image from
+#endif
 	HBITMAP hbDesktop = CreateCompatibleBitmap(this->hDC, this->inf.w, this->inf.h);//create a handle to a bitmap
 	SelectObject(this->hDest, hbDesktop); //select the bitmap handle
 	BitBlt( this->hDest, this->inf.x, this->inf.y, this->inf.w, this->inf.h, this->hDC, 0, 0, SRCCOPY); //copy the image
@@ -98,12 +101,17 @@ void ScreenCapture::screenCapture(Frame* f,bool freeLast){
 	bmpInfo.bmiHeader.biPlanes = 1;
 	bmpInfo.bmiHeader.biBitCount = 24;
 	bmpInfo.bmiHeader.biCompression = BI_RGB;        
-	bmpInfo.bmiHeader.biSizeImage = 0;     
+	bmpInfo.bmiHeader.biSizeImage = 0;   
+#ifndef DATA_CONT
+#define DATA_CONT
 	COLORREF* pixel = new COLORREF [ Bitmap.bmWidth * Bitmap.bmHeight ];
+#endif
 	GetDIBits( this->hDest , hbDesktop , 0 , Bitmap.bmHeight , pixel , &bmpInfo , DIB_RGB_COLORS );
 	DeleteObject(hbDesktop);
 	DeleteDC(this->hDest);
-	f->setData((unsigned char*)pixel,freeLast);
+	if(f!=NULL)
+		f->setData((unsigned char*)pixel,freeLast);
+	return (unsigned char*)pixel;
 }
 
 // Save a bit map to disk

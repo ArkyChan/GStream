@@ -23,6 +23,8 @@
 #define SHARED_PTR boost::shared_ptr
 #define CAST boost::lexical_cast
 
+#define DEFUALT_PORT "1337"
+
 // The packets
 enum packetID {
 	P_ID_PING,
@@ -42,4 +44,5 @@ enum packetID {
 //callback pointer
 typedef void(*FuncPointer)(SOCK*);
 typedef void(*socketWrite)(unsigned char*);
+
 #endif

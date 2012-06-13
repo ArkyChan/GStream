@@ -39,55 +39,55 @@ void net_stopServer(){
 
 // Get the time taken to send data to the client
 void net_onPing(SOCK* sock){
-	std::cout << "net_onPing" << std::endl;
+	//std::cout << "net_onPing" << std::endl;
 	sock->write_some(BUFF("PONG"));
 }
 
 // Get the clients ip and ports, returns any other ports this server is using
 void net_onHandshake(SOCK* sock){
-	std::cout << "net_onhandshake" << std::endl;
+	//std::cout << "net_onhandshake" << std::endl;
 	sock->write_some(BUFF("Handshake :)"));
 }
 
 // Set the position of the mouse
 void net_onMousepos(SOCK* sock){
-	std::cout << "net_onMousepos" << std::endl;
+	//std::cout << "net_onMousepos" << std::endl;
 	sock->write_some(BUFF("Mouse pos change"));
 }
 
 // Simulates the keypress of the key with the given id
 void net_onKeypress(SOCK* sock){
-	std::cout << "net_onKeypress" << std::endl;
+	//std::cout << "net_onKeypress" << std::endl;
 	sock->write_some(BUFF("Keypress :)"));
 }
 
 void net_onHello(SOCK* sock){
-	std::cout << "net_onHello" << std::endl;
+	//std::cout << "net_onHello" << std::endl;
 	sock->write_some(BUFF("Hey ^^"));
 }
 
 void net_onError(SOCK* sock){
-	std::cout << "net_onError" << std::endl;
+	//std::cout << "net_onError" << std::endl;
 	sock->write_some(BUFF("Oh no error!"));
 }
 void net_onLogin(SOCK* sock){
-	std::cout << "net_onLogin" << std::endl;
+	//std::cout << "net_onLogin" << std::endl;
 	sock->write_some(BUFF("LOL login"));
 }
 void net_onSetup(SOCK* sock){
-	std::cout << "net_onSetup" << std::endl;
+	//std::cout << "net_onSetup" << std::endl;
 	sock->write_some(BUFF("Setup stuff"));
 }
 void net_onStats(SOCK* sock){
-	std::cout << "net_onStats" << std::endl;
+	//std::cout << "net_onStats" << std::endl;
 	sock->write_some(BUFF("Stats req"));
 }
 void net_onGameStart(SOCK* sock){
-	std::cout << "net_onGameStart" << std::endl;
+	//std::cout << "net_onGameStart" << std::endl;
 	sock->write_some(BUFF("Game start!"));
 }
 void net_onCMD(SOCK* sock){
-	std::cout << "net_onCMD" << std::endl;
+	//std::cout << "net_onCMD" << std::endl;
 	sock->write_some(BUFF("CMD got"));
 }
 

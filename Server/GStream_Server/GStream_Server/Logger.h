@@ -6,7 +6,8 @@
 #define _WARN "[WARN]"
 #define _INFO "[INFO]"
 #define _ERROR "[ERROR]"
-#define _MAKE(str) (str = TEXT("{"+str+"}"))
+#define _MAKE_IP(str) (str = TEXT("{"+str+"}"))
+#define _MAKE_TAG(str) (str = TEXT("["+str+"]"))
 
 //check if iostream was included
 #include <iostream>

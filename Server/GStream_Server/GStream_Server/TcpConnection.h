@@ -19,9 +19,10 @@ namespace Gstream {
 		SOCK socket_;
 		boost::array<char, 8192> buffer_;
 		FuncPointer* func_ptr;
-		boost::array<int8_t, 1> incomming_packet;
+		boost::array<uint8_t, 1> incomming_packet;
 		std::string hostName;
 		void invalidData();
+		void getHostName();
 	};
 
 	typedef SHARED_PTR<TcpConnection> connection_ptr;

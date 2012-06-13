@@ -35,7 +35,7 @@ public:
 	winInfo hwndTowinInfo(HWND handle);
 	BOOL SaveToFile(HBITMAP hBitmap, LPCTSTR lpszFileName);
 	unsigned int tPix,TPix;
-	void ScreenCapture::screenCapture(Frame* frame,bool freeLast=true);
+	unsigned char* ScreenCapture::screenCapture(Frame* frame,bool freeLast=false);
 	Frame *rgbFrame;
 	void snap(const char*);
 	HDC hDC,hDest;

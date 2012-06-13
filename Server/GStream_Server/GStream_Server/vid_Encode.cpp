@@ -44,9 +44,8 @@ void vid_prep(int width, int height)
 	avcodec_register_all();
 
 	/* find the mpeg1 video encoder */
-	codec = avcodec_find_encoder(CodecID::CODEC_ID_H264);
-	if (!codec) 
-	{
+	codec = avcodec_find_encoder(CODEC_ID_H264);
+	if (!codec) {
 		fprintf(stderr, "codec not found\n");
 		exit(1);
 	}
@@ -96,8 +95,7 @@ void vid_prep(int width, int height)
 }
 
 // Write a frame
-void vid_writeFrame(uint8_t* imgData,size_t size)
-{
+void vid_writeFrame(uint8_t* imgData,size_t size){
 	outpic = avcodec_alloc_frame();
 	int nbytes = avpicture_get_size(PIX_FMT_YUV420P, c->width, c->height);
 

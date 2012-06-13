@@ -8,6 +8,7 @@
 #include <strsafe.h>
 #include "NetworkMain.h"
 #include "vid_Encode.h"
+#include "man_encode.h"
 
 //#define DEBUG
 
@@ -28,14 +29,14 @@ void progress(){
 	}
 }
 
-void vidTest();
+void vidTest();void vidTest2();
 
 #define TESTRUNS 500
 int main() {
 	_LOG("Server start.",_INFO);
 	net_startServer(0);
 	
-	//vidTest();
+	vidTest2();
 	cin.ignore(2);
 	net_stopServer();
 	return 0;
@@ -116,5 +117,30 @@ void vidTest()
 	}
 
 	vid_end();
+	cout << "Done" << endl;
+}
+void vidTest2()
+{
+	s = new ScreenCapture(GetForegroundWindow());
+
+	cout << "Vid start" << endl;
+	Gstream::encode::man_encode m = *new Gstream::encode::man_encode(1280,720,24);
+	cout << "Encodeing frames" << endl;
+	unsigned char* d;
+	// Encode 5 seconds of captures
+	for (int i = 0; i < 25*3; i++)	{
+
+		size_t start = clock();
+		d = s->screenCapture(0);
+		size_t cap = clock()-start;
+
+		start = clock();
+		d = m.encodeFrame(d);
+		size_t enc = clock()-start;
+		cout << cap << "/" << enc << " to encode and capture" << endl;
+
+		m.dumpFrame(d);
+	}
+
 	cout << "Done" << endl;
 }

@@ -10,23 +10,19 @@ namespace Gstream {
 	}
 
 	void TcpConnection::start() {
+		getHostName();
+		_LOG("Client connected.",hostName.c_str());
 		read();
 	}
 
 	void TcpConnection::read(){
-		try{
-			socket_.async_read_some(BUFF(incomming_packet),strand_.wrap(BIND(&TcpConnection::handle_read, shared_from_this(),PLACEHOLDER::error,PLACEHOLDER::bytes_transferred)));
-		}catch(std::exception&){
-			invalidData();
-			read();
-		}
-
+		socket_.async_read_some(BUFF(incomming_packet),strand_.wrap(BIND(&TcpConnection::handle_read, shared_from_this(),PLACEHOLDER::error,PLACEHOLDER::bytes_transferred)));
 	}
 	void TcpConnection::handle_read(const boost::system::error_code& e, std::size_t bytes_transferred) {
 		if (!e)  {
 			if (bytes_transferred) {
 				try{
-					int8_t c = (int8_t)incomming_packet[0];
+					uint8_t c = (uint8_t)incomming_packet[0];
 					
 					if(c >= P_ID_COUNT || c < 0)
 						throw std::exception("Out of range");
@@ -40,12 +36,14 @@ namespace Gstream {
 			}
 		}
 	}
-	void TcpConnection::invalidData(){
-		if(hostName==""){
+	void TcpConnection::getHostName(){
+		if(hostName.empty()){
 			ASIO::ip::address addr = socket_.remote_endpoint().address();
 			hostName = addr.to_string();
-			_MAKE(hostName);
+			_MAKE_IP(hostName);
 		}
+	}
+	void TcpConnection::invalidData(){
 		_LOG("Invalid packet ID recieved",hostName.c_str());
 		boost::asio::async_write(socket_, BUFF("Invalid packet ID!"), strand_.wrap(boost::bind(&TcpConnection::handle_write, shared_from_this(), PLACEHOLDER::error)));
 	}

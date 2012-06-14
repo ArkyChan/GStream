@@ -25,6 +25,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -49,7 +50,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>C:\ffmpeg\FFmpeg-FFmpeg-ea9537a\lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>false</LinkIncremental>
-    <GenerateManifest>false</GenerateManifest>
+    <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -76,19 +77,23 @@
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <CallingConvention>Cdecl</CallingConvention>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\code\ffmpeg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -99,7 +104,6 @@
     <ClCompile Include="ScreenCapture.cpp" />
     <ClCompile Include="TcpConnection.cpp" />
     <ClCompile Include="TcpServer.cpp" />
-    <ClCompile Include="TcpServer.h" />
     <ClCompile Include="vid_Encode.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +118,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScreenCapture.h" />
     <ClInclude Include="TcpConnection.h" />
+    <ClCompile Include="TcpServer.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="vid_Encode.h" />
   </ItemGroup>

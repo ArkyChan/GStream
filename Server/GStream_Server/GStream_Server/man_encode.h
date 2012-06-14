@@ -8,7 +8,7 @@ namespace Gstream {
 			man_encode(int w,int h,int bits);
 			~man_encode();
 			unsigned char* encodeFrame(unsigned char* data);
-			void dumpFrame(unsigned char* data);
+			void dumpFrame(unsigned char* data,bool leaveOpen=false);
 		private:
 			unsigned char* n_data;
 			unsigned char* lFrame;

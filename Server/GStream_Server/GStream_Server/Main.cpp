@@ -2,13 +2,12 @@
 
 #include "ScreenCapture.h"
 
-#include "Logger.h"
-#include <tchar.h>
-#include <conio.h>
-#include <strsafe.h>
 #include "NetworkMain.h"
 #include "vid_Encode.h"
 #include "man_encode.h"
+//#include <tchar.h>
+//#include <conio.h>
+//#include <strsafe.h>
 
 //#define DEBUG
 
@@ -16,7 +15,7 @@ using namespace std;
 
 int fps = 0;
 Gstream::capture::ScreenCapture *s;
-
+/*
 void progress(){
 	while(true){
 		TCHAR szNewTitle[MAX_PATH];
@@ -27,7 +26,7 @@ void progress(){
 		fps=0;
 		Sleep(1000);
 	}
-}
+}*/
 
 void vidTest();
 void vidTest2();
@@ -36,15 +35,15 @@ void vidTest2();
 
 int main() {
 	_LOG("Server start.",_INFO);
-	net_startServer(0);
+	//net_startServer(0);
 	
 	vidTest2();
 
 	cin.ignore(2);
-	net_stopServer();
+	//net_stopServer();
 	return 0;
 }
-
+/*
 void vidTest()
 {
 	s = new Gstream::capture::ScreenCapture(GetForegroundWindow());
@@ -62,7 +61,7 @@ void vidTest()
 
 	vid_end();
 	cout << "Done" << endl;
-}
+}*/
 void vidTest2()
 {
 	s = new Gstream::capture::ScreenCapture(GetForegroundWindow());
@@ -75,15 +74,8 @@ void vidTest2()
 	size_t start;
 	// Encode 5 seconds of captures
 	for (int i = 0; i < 25*5; i++)	{
-		start = clock();
 		d = s->screenCapture();
-		cout << clock()-start;
-
-		start = clock();
-		d = m.encodeFrame(d);
-		cout << "/" << clock()-start << endl;
-
-		m.dumpFrame(d);
+		m.dumpFrame(d,true);
 	}
 
 	cout << "Done (view with image.py)" << endl;

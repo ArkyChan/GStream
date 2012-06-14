@@ -25,7 +25,7 @@ namespace Gstream {
 		}
 		unsigned char* man_encode::encodeFrame(unsigned char* data){
 			if(this->lFrame != NULL){
-				for(int x = 0; x < this->d_len ;x++){
+				for(unsigned int x = 0; x < this->d_len ;x++){
 					data[x] = (data[x]/RND)*RND;
 
 					if(data[x] == this->lFrame[x] && this->frames != 0){
@@ -44,16 +44,18 @@ namespace Gstream {
 			return this->n_data;
 		}
 
-		void man_encode::dumpFrame(unsigned char* data){
+		void man_encode::dumpFrame(unsigned char* data,bool leaveOpen){
 			FILE *pFile;
-			fopen_s(&pFile,"test.data","ab");
+			if(pFile==NULL)
+				fopen_s(&pFile,"test.data","ab");
 			char* d = (char*)data;
-			for(int i=0;i<this->w*this->h;i++){
+			for(unsigned int i=0;i<this->w*this->h;i++){
 				char dat[] = {d[2],d[1],d[0]};
 				fwrite(&dat,3,1,pFile);
 				d += 3;
 			}
-			fclose(pFile);
+			if(!leaveOpen)
+				fclose(pFile);
 		}
 	}
 }

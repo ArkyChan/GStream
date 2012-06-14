@@ -2,7 +2,6 @@
 #define TCPCONNECTION_H
 
 #include "GLOBAL.h"
-#include "Logger.h"
 
 namespace Gstream {
 	/// Represents a single connection from a client.

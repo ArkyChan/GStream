@@ -1,4 +1,4 @@
-import struct,pygame,pygame.gfxdraw
+import struct,pygame
 f = open("test.data",'rb')
 pygame.init() 
 
@@ -8,10 +8,9 @@ for q in range(25*3):
 		for w in range(1280):
 			try:
 				data = struct.unpack("BBB",f.read(3));
-				#pygame.gfxdraw.pixel(window, w, h, data)
 				window.set_at((w,h),data)
 			except:
-				pygame.gfxdraw.pixel(window, w, h, (255,0,0))
+				pass
 		pygame.display.update()
 f.close()
 pygame.image.save(window, "test.data.jpg")

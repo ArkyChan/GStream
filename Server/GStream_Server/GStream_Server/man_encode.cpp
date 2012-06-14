@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#define RND 20.0
-#define KEYS 5
+#define RND 10
+#define KEYS 10
 
 namespace Gstream {
 	namespace encode {
@@ -20,32 +20,27 @@ namespace Gstream {
 			this->lFrame = 0;
 			this->frames = 0;
 		}
+		man_encode::~man_encode(){
+			free(this->n_data);
+		}
 		unsigned char* man_encode::encodeFrame(unsigned char* data){
-			for(int x = 0; x < this->d_len ;x++){
-				data[x] = (char)(int)((float)data[x]/RND)*RND;
+			if(this->lFrame != NULL){
+				for(int x = 0; x < this->d_len/2 ;x++){
+					data[x] = (data[x]/RND)*RND;
 
-				if(this->lFrame != NULL || (this->frames%5)!=0){
-					if(data[x] == this->lFrame[x]){
-						this->n_data[x] = '\x00';
+					if(data[x] == this->lFrame[x] && this->frames != 0){
+						this->n_data[x] = '\xFF';
 					} else {
 						this->n_data[x] = data[x];
 					}
-				}else {
-					this->n_data[x] = data[x];
 				}
+				free(this->lFrame);
 			}
-			this->frames++;
+			this->frames = (this->frames >= KEYS ? 0 : ++this->frames);
 			this->lFrame = data;
 			return this->n_data;
 		}
-		char man_encode::floorf_ASM(float a)	{
-			int i;
-			__asm {
-				fld a
-				fistp i
-			}
-			return (char)i;
-		}
+
 		void man_encode::dumpFrame(unsigned char* data){
 			FILE *pFile;
 			fopen_s(&pFile,"test.data","ab");

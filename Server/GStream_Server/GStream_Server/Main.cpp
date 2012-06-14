@@ -15,7 +15,7 @@
 using namespace std;
 
 int fps = 0;
-ScreenCapture *s;
+Gstream::capture::ScreenCapture *s;
 
 void progress(){
 	while(true){
@@ -29,81 +29,25 @@ void progress(){
 	}
 }
 
-void vidTest();void vidTest2();
+void vidTest();
+void vidTest2();
 
 #define TESTRUNS 500
+
 int main() {
 	_LOG("Server start.",_INFO);
 	net_startServer(0);
 	
 	vidTest2();
+
 	cin.ignore(2);
 	net_stopServer();
 	return 0;
-
-	//Sleep(5000);
-	unsigned int timeBefore = clock();
-	unsigned int times[TESTRUNS];
-	cout << "Press enter to start..";
-	cin.ignore();
-	cout << "Get window handle.." <<endl;
-
-	cout << "Setup time.." << endl;
-	s = new ScreenCapture(GetForegroundWindow());
-
-	cout << "Start progress thread" << endl;
-	boost::thread workerThread(progress);
-
-	cout << "Do b-frames" << endl;
-	unsigned int res=0;
-	for (int i = 0; i < TESTRUNS; i++)
-	{
-		timeBefore = clock();
-		s->screenCapture(s->rgbFrame);
-
-		/*
-		s->lastFrame->writeRaw("test.data");
-		RGBtoYUV420PSameSize(s->lastFrame->getData(),nData,s->inf.bpp,0,s->inf.w,s->inf.h);
-		vpx_image_t* img = (vpx_image_t*)nData;
-		s->gcap.writeRaw("test.yuv.data",s->inf.w,s->inf.h,4,nData);
-
-		if(vpx_codec_encode(&s->codec,img,s->frame_cnt,1,0,VPX_DL_REALTIME)==0){
-		s->pkt = vpx_codec_get_cx_data(&s->codec, &s->iter);
-		res = s->pkt->data.frame.sz;
-		}else {
-		ScreenCapture::die_codec(&s->codec,"Failed encode frame");
-		cin.ignore();
-		return 0;
-		}
-		*/
-
-		times[i] = (clock() - timeBefore);
-		fps++;
-		//cout << res << endl;
-	}
-	s->rgbFrame->writeRaw("test.data");
-
-	unsigned int sum=0,min=INT_MAX,max=0;
-	for (int i = 0; i < TESTRUNS; i++)
-	{
-		sum += times[i];
-		if(times[i]>max)
-			max = times[i];
-		else if(times[i]<min)
-			min = times[i];
-	}
-	cout << "Avegrage: " << (sum / TESTRUNS) << endl;
-	cout << "Min/Max: " << min << "-" << max;
-
-	//startGame("E:\\Terra\\NA\\TERA\\TERA-Launcher.exe");
-
-	//capScreen(0, 0, 720, 640);
-	cin.ignore(2);
 }
 
 void vidTest()
 {
-	s = new ScreenCapture(GetForegroundWindow());
+	s = new Gstream::capture::ScreenCapture(GetForegroundWindow());
 
 	cout << "Vid start" << endl;
 	vid_prep(1280, 720);
@@ -121,24 +65,19 @@ void vidTest()
 }
 void vidTest2()
 {
-	s = new ScreenCapture(GetForegroundWindow());
+	s = new Gstream::capture::ScreenCapture(GetForegroundWindow());
+	s->setupGDC();
 
 	cout << "Vid start" << endl;
 	Gstream::encode::man_encode m = *new Gstream::encode::man_encode(1280,720,24);
 	cout << "Encodeing frames" << endl;
 	unsigned char* d;
+	size_t start;
 	// Encode 5 seconds of captures
-	for (int i = 0; i < 25*3; i++)	{
-
-		size_t start = clock();
-		d = s->screenCapture(0);
-		size_t cap = clock()-start;
-
+	for (int i = 0; i < 25*5; i++)	{
 		start = clock();
-		d = m.encodeFrame(d);
-		size_t enc = clock()-start;
-		cout << cap << "/" << enc << " to encode and capture" << endl;
-
+		d = m.encodeFrame(s->screenCapture());
+		cout << clock()-start << endl;
 		m.dumpFrame(d);
 	}
 

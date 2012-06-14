@@ -8,7 +8,8 @@ for q in range(25*3):
 		for w in range(1280):
 			try:
 				data = struct.unpack("BBB",f.read(3));
-				window.set_at((w,h),data)
+				if data[0] != 255 and data[1] != 255 and data[2] != 255 and q > 0:
+					window.set_at((w,h),data)
 			except:
 				pass
 		pygame.display.update()

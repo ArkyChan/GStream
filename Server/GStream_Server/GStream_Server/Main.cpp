@@ -76,10 +76,15 @@ void vidTest2()
 	// Encode 5 seconds of captures
 	for (int i = 0; i < 25*5; i++)	{
 		start = clock();
-		d = m.encodeFrame(s->screenCapture());
-		cout << clock()-start << endl;
+		d = s->screenCapture();
+		cout << clock()-start;
+
+		start = clock();
+		d = m.encodeFrame(d);
+		cout << "/" << clock()-start << endl;
+
 		m.dumpFrame(d);
 	}
 
-	cout << "Done" << endl;
+	cout << "Done (view with image.py)" << endl;
 }

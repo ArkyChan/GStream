@@ -9,14 +9,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#define VPX_CODEC_DISABLE_COMPAT 1
-#include "vpx/vpx_encoder.h"
-#include "vpx/vp8cx.h"
-#define iface (vpx_codec_vp8_cx())
-#define fourcc    0x30385056
-
-#define IVF_FILE_HDR_SZ  (32)
-#define IVF_FRAME_HDR_SZ (12)
 
 namespace Gstream{
 	namespace capture {

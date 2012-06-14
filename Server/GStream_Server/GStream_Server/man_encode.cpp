@@ -25,7 +25,7 @@ namespace Gstream {
 		}
 		unsigned char* man_encode::encodeFrame(unsigned char* data){
 			if(this->lFrame != NULL){
-				for(int x = 0; x < this->d_len/2 ;x++){
+				for(int x = 0; x < this->d_len ;x++){
 					data[x] = (data[x]/RND)*RND;
 
 					if(data[x] == this->lFrame[x] && this->frames != 0){
@@ -35,6 +35,9 @@ namespace Gstream {
 					}
 				}
 				free(this->lFrame);
+			}else {
+				this->lFrame = data;
+				return data;
 			}
 			this->frames = (this->frames >= KEYS ? 0 : ++this->frames);
 			this->lFrame = data;

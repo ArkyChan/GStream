@@ -1,18 +1,20 @@
-import struct,pygame
-f = open("test.data",'rb')
+import struct,pygame,OpenGL.GL,OpenGL.GLU
+
+#f = open("test.data",'rb')
 pygame.init() 
 
-window = pygame.display.set_mode((1280,720),pygame.HWSURFACE) 
-for q in range(25*3):
-	for h in range(720):
-		for w in range(1280):
-			try:
-				data = struct.unpack("BBB",f.read(3));
-				if data[0] != 255 and data[1] != 255 and data[2] != 255 and q > 0:
-					window.set_at((w,h),data)
-			except:
-				pass
-		pygame.display.update()
-f.close()
+window = pygame.display.set_mode((1280,720),pygame.DOUBLEBUF | pygame.OPENGL) 
+
+# for q in range(25*3):
+	# for h in range(720):
+		# for w in range(1280):
+			# try:
+				# data = struct.unpack("BBB",f.read(3));
+				# if data[0] != 255 and data[1] != 255 and data[2] != 255 and q > 0:
+					# window.set_at((w,h),data)
+			# except:
+				# pass
+		# pygame.display.flip()
+#f.close()
 pygame.image.save(window, "test.data.jpg")
 raw_input("Press enter to exit")

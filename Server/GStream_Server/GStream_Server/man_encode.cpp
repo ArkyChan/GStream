@@ -46,16 +46,14 @@ namespace Gstream {
 
 		void man_encode::dumpFrame(unsigned char* data,bool leaveOpen){
 			FILE *pFile;
-			if(pFile==NULL)
-				fopen_s(&pFile,"test.data","ab");
+			fopen_s(&pFile,"test.data","ab");
 			char* d = (char*)data;
 			for(unsigned int i=0;i<this->w*this->h;i++){
 				char dat[] = {d[2],d[1],d[0]};
 				fwrite(&dat,3,1,pFile);
 				d += 3;
 			}
-			if(!leaveOpen)
-				fclose(pFile);
+			fclose(pFile);
 		}
 	}
 }

@@ -23,8 +23,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>
+    </WholeProgramOptimization>
+    <CharacterSet>
+    </CharacterSet>
     <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -45,12 +47,13 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\boost\boost_1_47;$(IncludePath)</IncludePath>
+    <IncludePath>C:\code\zlib-1.2.7;C:\code\ffmpeg\include;C:\Program Files %28x86%29\boost\boost_1_47;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\ffmpeg\FFmpeg-FFmpeg-ea9537a\lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
-    <LinkIncremental>false</LinkIncremental>
-    <GenerateManifest>true</GenerateManifest>
+    <LibraryPath>C:\code\zlib-1.2.7\lib;C:\code\ffmpeg\lib;C:\ffmpeg\FFmpeg-FFmpeg-ea9537a\lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>
+    </LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -66,34 +69,49 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>
+      </WarningLevel>
       <Optimization>Full</Optimization>
-      <FunctionLevelLinking>false</FunctionLevelLinking>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\code\ffmpeg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-D_WIN32_WINNT=0x0501 %(AdditionalOptions)</AdditionalOptions>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <IntrinsicFunctions>
+      </IntrinsicFunctions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <EnableFiberSafeOptimizations>
+      </EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>
+      </WholeProgramOptimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <FloatingPointModel>Fast</FloatingPointModel>
-      <FloatingPointExceptions>false</FloatingPointExceptions>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <FloatingPointExceptions>
+      </FloatingPointExceptions>
+      <EnableEnhancedInstructionSet>
+      </EnableEnhancedInstructionSet>
       <CallingConvention>Cdecl</CallingConvention>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+      <CompileAs>
+      </CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\code\ffmpeg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;gdi32.lib;libz.a;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalOptions>
       </AdditionalOptions>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

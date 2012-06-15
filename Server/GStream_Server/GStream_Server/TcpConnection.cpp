@@ -24,9 +24,10 @@ namespace Gstream {
 				try{
 					uint8_t c = (uint8_t)incomming_packet[0];
 					
-					if(c >= P_ID_COUNT || c < 0)
+					if(c >= P_ID_COUNT || c < 0){
+						std::cout << c << std::endl;
 						throw std::exception("Out of range");
-					
+					}
 					func_ptr[c](&socket_);
 					read();
 				}catch(std::exception&){

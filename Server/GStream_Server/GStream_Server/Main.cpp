@@ -1,10 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 
-#include "ScreenCapture.h"
-
 #include "NetworkMain.h"
-#include "vid_Encode.h"
-#include "man_encode.h"
+//#include "vid_Encode.h"
 //#include <tchar.h>
 //#include <conio.h>
 //#include <strsafe.h>
@@ -13,8 +10,8 @@
 
 using namespace std;
 
-int fps = 0;
-Gstream::capture::ScreenCapture *s;
+//int fps = 0;
+//Gstream::capture::ScreenCapture *s;
 /*
 void progress(){
 	while(true){
@@ -28,19 +25,19 @@ void progress(){
 	}
 }*/
 
-void vidTest();
-void vidTest2();
+//void vidTest();
+//void vidTest2();
 
-#define TESTRUNS 500
+//#define TESTRUNS 500
 
 int main() {
 	_LOG("Server start.",_INFO);
-	//net_startServer(0);
+	net_startServer(0);
 	
-	vidTest2();
+	//vidTest2();
 
 	cin.ignore(2);
-	//net_stopServer();
+	net_stopServer();
 	return 0;
 }
 /*
@@ -61,7 +58,7 @@ void vidTest()
 
 	vid_end();
 	cout << "Done" << endl;
-}*/
+}
 void vidTest2()
 {
 	s = new Gstream::capture::ScreenCapture(GetForegroundWindow());
@@ -79,4 +76,4 @@ void vidTest2()
 	}
 
 	cout << "Done (view with image.py)" << endl;
-}
+}*/

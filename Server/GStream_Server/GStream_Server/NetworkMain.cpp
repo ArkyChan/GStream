@@ -7,7 +7,7 @@
 #include <strsafe.h>
 
 #include <lzo\lzoconf.h>
-#include <lzo\lzo1x.h>
+#include <lzo\lzo1b.h>
 
 #define USE_LZO1X 1
 
@@ -110,19 +110,16 @@ namespace Gstream {
 			unsigned char* img = 0;
 
 			lzo_init();
-			lzo_voidp wrkmen = (lzo_voidp)malloc(LZO1X_1_MEM_COMPRESS);
+			lzo_voidp wrkmen = (lzo_voidp)malloc(LZO1B_MEM_COMPRESS);
 			lzo_uint out_len;
 
-			for(int i=0;i<400;i++){
-				if(sock->is_open()){
-					img = m.encodeFrame(s->screenCapture());
-					lzo1x_1_compress(img,buffSize,buffer,&out_len,wrkmen);
-					dataQ += out_len;
+			while(sock->is_open()){
+				img = m.encodeFrame(s->screenCapture());
+				lzo1b_9_compress(img,buffSize,buffer,&out_len,wrkmen);
+				dataQ += out_len;
 
-					sock->write_some(BUFF(&out_len,sizeof(lzo_uint)));
-					sock->write_some(BUFF(buffer,out_len));
-				}else
-					break;
+				sock->write_some(BUFF(&out_len,sizeof(lzo_uint)));
+				sock->write_some(BUFF(buffer,out_len));
 			}
 		}
 

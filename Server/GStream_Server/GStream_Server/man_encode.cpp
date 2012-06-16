@@ -7,7 +7,7 @@
 
 #define RND 10
 #define KEYS 10
-
+#define BLOCK 
 namespace Gstream {
 	namespace encode {
 		man_encode::man_encode(int w,int h,int bits){

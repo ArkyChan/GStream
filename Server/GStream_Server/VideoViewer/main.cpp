@@ -8,7 +8,7 @@
 #include <ClanLib/network.h>
 
 #include "lzo/lzoconf.h"
-#include <lzo\lzo1x.h>
+#include <lzo\lzo1b.h>
 
 #define USE_LZO1X 1
 
@@ -81,12 +81,12 @@ int main(){
 			CL_DisplayWindow window("GStream network viewer",1280,720);
 
 			lzo_init();
-			lzo_voidp wrkmen = (lzo_voidp)malloc(LZO1X_1_MEM_COMPRESS);
+			lzo_voidp wrkmen = (lzo_voidp)malloc(LZO1B_MEM_DECOMPRESS);
 			lzo_uint out_len = frame_size;
 
 			while((len = con.read(data,size))>0){
 				out_len = frame_size;
-				lzo1x_decompress(data,size,udata,&out_len,wrkmen);
+				lzo1b_decompress(data,size,udata,&out_len,wrkmen);
 
 				if(out_len<frame_size){
 					throw CL_Exception("Invalid compressed data");

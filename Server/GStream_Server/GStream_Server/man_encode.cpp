@@ -28,7 +28,7 @@ namespace Gstream {
 				for(unsigned int x = 0; x < this->d_len ;x++){
 					data[x] = (data[x]/RND)*RND;
 
-					if(data[x] == this->lFrame[x] && this->frames != 0){
+					if(data[x] == this->lFrame[x]){ //&& this->frames != 0
 						this->n_data[x] = '\xFF';
 					} else {
 						this->n_data[x] = data[x];
@@ -39,7 +39,7 @@ namespace Gstream {
 				this->lFrame = data;
 				return data;
 			}
-			this->frames = (this->frames >= KEYS ? 0 : ++this->frames);
+			//this->frames = (this->frames >= KEYS ? 0 : ++this->frames);
 			this->lFrame = data;
 			return this->n_data;
 		}

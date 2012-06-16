@@ -6,7 +6,11 @@
 #include <ClanLib/application.h>
 #include <stdio.h>
 #include <ClanLib/network.h>
-#include <zlib.h>
+
+#include "lzo/lzoconf.h"
+#include <lzo\lzo1x.h>
+
+#define USE_LZO1X 1
 
 int main(){
 	CL_SetupCore setup_core;
@@ -48,60 +52,70 @@ int main(){
 		fclose(f);
 
 		glFinish();
-		std::cout << "Press enter to exit";
-		std::cin.ignore();
 
 	}else {
 		CL_SetupNetwork setup_network;
-
 		try{
-			CL_SocketName s("127.0.0.1","1337");
+			std::cout << "Enter ip:";
+			std::string ip = "127.0.0.1"; 
+			std::cin >> ip;
+			std::cout << "\n\nConnecting...." << std::endl;
+
+			CL_SocketName s(ip,"1337");
 			CL_TCPConnection con(s);
 
 			con.write_uint8(9);
 
 			//get size
-			
-			int size = con.read_uint32();
+			int size = 0;
+			int frame_size = 1280*720*3; 
+			con.read(&size,sizeof(int));
+
 			std::cout << size << std::endl;	
+
+			unsigned char* udata = (unsigned char*)malloc(frame_size);
 			unsigned char* data = (unsigned char*)malloc(size);
-			unsigned char* stay = (unsigned char*)malloc(size);
-			int len;
+			unsigned char* stay = (unsigned char*)malloc(frame_size);
+			int len,lastSize;
 			std::cout << "Starting playback" << std::endl;	
 			CL_DisplayWindow window("GStream network viewer",1280,720);
-			
-			while((len = con.read(data,101*1024,false))>0){
-				z_stream strm;
-				strm.zalloc = Z_NULL;
-				strm.zfree = Z_NULL;
-				strm.opaque = Z_NULL;
-				strm.avail_in = 0;
-				strm.next_in = Z_NULL;
-				inflateInit(&strm);
-				strm.avail_out = size;
-				strm.avail_in = len;
-				strm.next_in  = data;
-				strm.next_out = data;
-				inflate(&strm, Z_FINISH);
-				inflateEnd(&strm);
 
-				for(int i=0;i<size;i++){
-					//data[i] = _byteswap_ushort(data[i]);
-					if(data[i] != 255){
-						stay[i] = data[i]; 
+			lzo_init();
+			lzo_voidp wrkmen = (lzo_voidp)malloc(LZO1X_1_MEM_COMPRESS);
+			lzo_uint out_len = frame_size;
+
+			while((len = con.read(data,size))>0){
+				out_len = frame_size;
+				lzo1x_decompress(data,size,udata,&out_len,wrkmen);
+
+				if(out_len<frame_size){
+					throw CL_Exception("Invalid compressed data");
+				}
+				
+				for(int i=0;i<frame_size;i++){
+					if(udata[i] != 255){
+						stay[i] = udata[i]; 
 					}
 				}
 
+				
 				glClear(GL_COLOR_BUFFER_BIT);
 				glRasterPos2i(-1, 1); 
 				glPixelZoom(1,-1); 
 				glDrawPixels(1280,720,GL_BGR, GL_UNSIGNED_BYTE , stay);
 				window.flip();
 				CL_KeepAlive::process();
+
+				//read the next size
+				lastSize=size;
+				con.read(&size,sizeof(int));
+				if(lastSize < size)
+					data = (unsigned char*)realloc(data,size);
 			}
 
 		}catch(CL_Exception ex){std::cout << ex.get_message_and_stack_trace().c_str() << std::endl;}
 	}
+
 	std::cout << "Press enter to exit..";
 	std::cin.ignore();
 }

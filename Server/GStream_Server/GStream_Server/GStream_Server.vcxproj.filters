@@ -48,9 +48,6 @@
     <ClCompile Include="ScreenCapture.cpp">
       <Filter>Source Files\Video</Filter>
     </ClCompile>
-    <ClCompile Include="TcpServer.h">
-      <Filter>Header Files\net</Filter>
-    </ClCompile>
     <ClCompile Include="TcpServer.cpp">
       <Filter>Source Files\net</Filter>
     </ClCompile>
@@ -100,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="man_encode.h">
       <Filter>Header Files\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpServer.h">
+      <Filter>Header Files\net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

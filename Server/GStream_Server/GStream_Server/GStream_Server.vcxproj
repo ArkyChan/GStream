@@ -47,10 +47,10 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\code\zlib-1.2.7;C:\code\ffmpeg\include;C:\Program Files %28x86%29\boost\boost_1_47;$(IncludePath)</IncludePath>
+    <IncludePath>C:\code\lzo-2.06\include;C:\code\ffmpeg\include;C:\Program Files %28x86%29\boost\boost_1_47;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\code\zlib-1.2.7\lib;C:\code\ffmpeg\lib;C:\ffmpeg\FFmpeg-FFmpeg-ea9537a\lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\code\lzo-2.06;C:\code\ffmpeg\lib;C:\ffmpeg\FFmpeg-FFmpeg-ea9537a\lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>
     </LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -103,7 +103,7 @@
       </EnableCOMDATFolding>
       <OptimizeReferences>
       </OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;gdi32.lib;libz.a;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;gdi32.lib;liblzo2.a;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
@@ -136,7 +136,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScreenCapture.h" />
     <ClInclude Include="TcpConnection.h" />
-    <ClCompile Include="TcpServer.h" />
+    <ClInclude Include="TcpServer.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="vid_Encode.h" />
   </ItemGroup>

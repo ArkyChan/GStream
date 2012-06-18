@@ -4,3 +4,12 @@
 *.data
 log
 *.jpg
+*.png
+*.tlog
+*.exe*
+*.obj
+*.pdb
+*.log
+*.lastbuildstate
+*.ilk
+*.zip

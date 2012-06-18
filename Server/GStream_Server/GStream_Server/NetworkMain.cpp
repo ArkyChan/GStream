@@ -5,6 +5,7 @@
 
 #include "NetworkMain.h"
 #include <strsafe.h>
+#include "vpx_encode.h"
 
 #include <lzo\lzoconf.h>
 #include <lzo\lzo1b.h>
@@ -105,7 +106,10 @@ namespace Gstream {
 			int buffSize = (1280*720*3);
 			capture::ScreenCapture* s = new capture::ScreenCapture(GetForegroundWindow());
 			s->setupGDC();
+
 			encode::man_encode m = *new encode::man_encode(1280,720,24);
+			encode::vpx_encode vpx = *new encode::vpx_encode(1280,720,24);
+
 			unsigned char* buffer = (unsigned char*)malloc(buffSize);
 			unsigned char* img = 0;
 
@@ -114,8 +118,11 @@ namespace Gstream {
 			lzo_uint out_len;
 
 			while(sock->is_open()){
-				img = m.encodeFrame(s->screenCapture());
-				lzo1b_9_compress(img,buffSize,buffer,&out_len,wrkmen);
+				uint32_t sz = buffSize;
+				//img = m.encodeFrame(s->screenCapture());
+				img = vpx.encodeFrameRGB(s->screenCapture(),sz);
+
+				lzo1b_9_compress(img,sz,buffer,&out_len,wrkmen);
 				dataQ += out_len;
 
 				sock->write_some(BUFF(&out_len,sizeof(lzo_uint)));

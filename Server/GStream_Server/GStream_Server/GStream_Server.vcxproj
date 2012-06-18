@@ -47,10 +47,10 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\code\lzo-2.06\include;C:\code\ffmpeg\include;C:\Program Files %28x86%29\boost\boost_1_47;$(IncludePath)</IncludePath>
+    <IncludePath>C:\code\libvpx\vpx-vp8-debug-src-x86_64-win64mt-vs9-v1.1.0\include;C:\code\lzo-2.06\include;C:\code\ffmpeg\include;C:\Program Files %28x86%29\boost\boost_1_47;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\code\lzo-2.06;C:\code\ffmpeg\lib;C:\ffmpeg\FFmpeg-FFmpeg-ea9537a\lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\code\libvpx\vpx-vp8-debug-src-x86_64-win64mt-vs9-v1.1.0\lib\Win32;C:\code\lzo-2.06;C:\code\ffmpeg\lib;C:\ffmpeg\FFmpeg-FFmpeg-ea9537a\lib;C:\Program Files %28x86%29\boost\boost_1_47\lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>
     </LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -103,7 +103,7 @@
       </EnableCOMDATFolding>
       <OptimizeReferences>
       </OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;gdi32.lib;liblzo2.a;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;gdi32.lib;liblzo2.a;vpxmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
@@ -112,6 +112,7 @@
       </AdditionalOptions>
       <LinkErrorReporting>
       </LinkErrorReporting>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -123,6 +124,7 @@
     <ClCompile Include="TcpConnection.cpp" />
     <ClCompile Include="TcpServer.cpp" />
     <ClCompile Include="vid_Encode.cpp" />
+    <ClCompile Include="vpx_encode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLOBAL.h" />
@@ -139,6 +141,7 @@
     <ClInclude Include="TcpServer.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="vid_Encode.h" />
+    <ClInclude Include="vpx_encode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

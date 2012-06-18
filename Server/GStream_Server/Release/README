@@ -1,0 +1,6 @@
+v0.2 Alpha.
+
+Run Gstream_Server.exe
+Run VideoViewer.exe and enter 127.0.0.1 or whatever the ip of the server its running.
+
+NB: Data is kind of compressed and not fully optimised LZO-1 is enabled 

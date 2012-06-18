@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="libs/jquery.qtip.min.css" />
+		<link rel="stylesheet" type="text/css" href="libs/jquery.noty.css"/>
+		<link rel="stylesheet" type="text/css" href="libs/noty_theme_default.css"/>
+	
+		<script type="text/javascript" src="libs/jquery-1.7.2.min.js"> </script>
+		<script type="text/javascript" src="libs/jquery.qtip.min.js"> </script>
+		<script type="text/javascript" src="libs/jquery.noty.js"></script>
+		<script type="text/javascript" src="script.js"> </script>
+	</head>
+	<body onLoad="setup();">
+		<div id="connectionMenu" class="menu">
+			<div id="connectBox" class="roundCorner"> 
+				<div id="connectBoxHeader" > <b>Server Connect:</b> </div>
+				<div id="connectionError" > </div>
+				<input id="tb_ip" placeholder="Server IP" name="ip" type="text" style="height:22px; width:79%; margin-left:2%; margin-right:1%; margin-top:10px;"/>
+				<input id="tb_port" placeholder="Port" name="port" type="text" style="height:22px; width:15%; margin-top:5px;"/><br/>
+				<input id="tb_pass" placeholder="Password" name="pass" type="password" style="height:22px; width:96%; margin-left:2%; margin-top:10px;"/><br/>
+				<input id="btt_serverConnect" type="submit" value="Connect" class="menuBtt" />
+			</div>
+		</div>
+		<div id="gamesListMenu" class="menu">
+			<div id="gamesList" class="roundCorner"> 
+				<div id="connectBoxHeader" > <b>Games List:</b> </div>
+				<center>
+					<div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div>
+					<div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div>
+					<div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div>
+					<div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div><div class="gameItem"> </div>
+				</center>
+			</div>
+		</div>
+		<div id="overlayMenu" class="menu">
+			<div id="overlayMenuBox" class="roundCorner"> 
+				<div id="connectBoxHeader" > <b>GEE STREAM:</b> </div>
+				<input id="btt_resume" type="submit" value="Resume" class="menuBtt" />
+				<input id="btt_gameslist" type="submit" value="Games List" class="menuBtt" />
+				<input id="btt_settings" type="submit" value="Settings" class="menuBtt" />
+				<input id="btt_console" type="submit" value="Console" class="menuBtt" />
+				<input id="btt_exit" type="submit" value="Exit to Desktop" class="menuBtt" />
+			</div>
+		</div>
+		<div id="settingsMenu" class="menu">
+			<div id="settings" class="roundCorner"> 
+				<div id="connectBoxHeader" > <b>Settings:</b> </div>
+				<center>
+					<img src="images/137351.jpg"/></br>
+					<object width="420" height="315"><param name="movie" value="http://www.youtube.com/v/PV0OvF7POg8?version=3&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/PV0OvF7POg8?version=3&amp;hl=en_US" type="application/x-shockwave-flash" width="420" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>
+				</center>
+			</div>
+		</div>
+		<div id="consoleMenu" class="menu">
+			<div id="console" class="roundCorner"> 
+				<div id="connectBoxHeader" > <b>Console:</b> </div>
+				<div id="consoleoutput" class="roundCorner"> Good Job! </br> Yayifications </div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,207 @@
+/* Gobal styles */
+
+@font-face 
+{
+	font-family: V5PRC;
+	src: url('fonts/V5PRC___.ttf');
+}
+
+body
+{
+	-webkit-user-select: none;
+	background-image:url('images/yui.jpg');
+	/*background-color:RGBA(255, 0, 0, 0.5);*/
+	/*opacity:0.5;*/
+	color: RGB(204, 204, 204);
+	background-size: cover;
+} 
+
+INPUT[type=text],INPUT[type=password]
+{
+	outline: none;
+	border-style:solid;
+	background-color:RGB(71, 71, 71);
+	border-color:RGB(6, 219, 251);
+	color: RGB(204, 204, 204);
+	padding-left: 2px;
+	border-radius: 4px;
+}
+
+INPUT[type=text]:hover, INPUT[type=password]:hover, INPUT[type=text]:focus, INPUT[type=password]:focus
+{
+	border-color:RGB(253, 167, 1);
+	/* border-color:RGB(238, 58, 3); */
+}
+
+INPUT[type=submit] 
+{
+	border-style:solid;
+	border-color:RGB(6, 219, 251);
+	background-color:RGB(71, 71, 71);
+	font-family: V5PRC;
+	font-size:120%;
+	font-weight:bold;
+	color: RGB(204, 204, 204);
+	border-radius: 6px;
+}
+
+INPUT[type=submit]:hover
+{
+	border-style:solid;
+	border-color:RGB(253, 167, 1);
+	color: RGB(253, 167, 1);
+}
+
+INPUT[type=submit]:active 
+{
+	
+}
+
+/* Style classes */
+
+.center_horz
+{
+	margin: auto;
+}
+
+.shadow
+{
+	-webkit-box-shadow: #171717 2px 2px 2px;
+}
+
+.roundCorner
+{
+	border-radius: 8px;
+}
+
+.menu
+{
+	visibility: hidden;
+}
+
+.menuBtt
+{
+	height: 32px;
+	width:96%;
+	margin-left:2%;
+	margin-top:10px;
+}
+
+.gameItem
+{
+	float: left;
+	width: 120px;
+	height: 200px;
+	background-image:url("images/konata.jpg");
+	background-color:RGB(34, 34, 34);
+	background-size: cover;
+	overflow: hidden;
+	border-style:solid;
+	border-color:RGB(6, 219, 251);
+	margin: 5px;
+	border-radius: 6px;
+	-webkit-box-shadow: #171717 2px 2px 2px;
+}
+
+.gameItem:hover
+{
+	border-color:RGB(253, 167, 1);
+}
+
+/* UI Elements */
+
+/* Main DIV for the server connect promt */
+
+#connectBox
+{
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	width: 30%;
+	height: 158px;
+	margin-top:-79px;
+	margin-left:-15%;
+	background-color:RGB(34, 34, 34);
+	overflow: hidden;
+}
+
+
+#connectBoxHeader
+{
+	height: 40px;
+	background-color:RGB(71, 71, 71);
+	
+	font-family: V5PRC;
+	color: RGB(253, 167, 1);
+	font-size:120%;
+	text-align: center;
+	line-height: 40px;
+	
+	/*  Sadly webkit won't hide overflow unless its conting div has position: static;, and I can't set that :/ *sigh* Gecko <3 */
+	-webkit-border-top-left-radius: 8px;
+	-webkit-border-top-right-radius: 8px;
+}
+
+#connectionError
+{
+	background-color:TEAL;
+	
+	text-align: center;
+}
+
+#overlayMenuBox
+{
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	width: 30%;
+	height: 260px;
+	margin-top:-130px;
+	margin-left:-15%;
+	background-color:RGB(34, 34, 34);
+	overflow: hidden;
+}
+
+#gamesList
+{
+	position:absolute;
+	top:1%;
+	left: 1%;
+	width: 98%;
+	height: 98%;
+	background-color:RGB(34, 34, 34);
+	overflow: auto;
+}
+
+#settings
+{
+	position:absolute;
+	top:1%;
+	left: 1%;
+	width: 98%;
+	height: 98%;
+	background-color:RGB(34, 34, 34);
+	overflow: hidden;
+}
+
+#console
+{
+	position:absolute;
+	top:1%;
+	left: 1%;
+	width: 98%;
+	height: 98%;
+	background-color:RGB(34, 34, 34);
+	overflow: hidden;
+	padding-bottom: 5px;
+}
+
+#consoleoutput
+{
+	position: relative;
+	margin: 5px;
+	border-style:solid;
+	border-color: RGB(6, 219, 251);
+	background-color: RGB(71, 71, 71);
+	padding: 5px;
+}

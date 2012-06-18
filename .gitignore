@@ -1,8 +1,6 @@
 *.sdf
 *.ipch
-Release
 *.dll
 *.data
 log
 *.jpg
-*.png

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GStream_Server", "GStream_Server\GStream_Server.vcxproj", "{BC7ABE73-DF2C-4E80-9C0A-9C6FCF5DBCB7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VideoViewer", "VideoViewer\VideoViewer.vcxproj", "{7C642F4F-5C57-46E8-B843-C227134CA2C6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GStream_Client", "GStream_Client\GStream_Client.vcxproj", "{EFBC044E-4BEB-4CEA-BAFA-9E491C20F758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{7C642F4F-5C57-46E8-B843-C227134CA2C6}.Debug|Win32.Build.0 = Debug|Win32
 		{7C642F4F-5C57-46E8-B843-C227134CA2C6}.Release|Win32.ActiveCfg = Release|Win32
 		{7C642F4F-5C57-46E8-B843-C227134CA2C6}.Release|Win32.Build.0 = Release|Win32
+		{EFBC044E-4BEB-4CEA-BAFA-9E491C20F758}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EFBC044E-4BEB-4CEA-BAFA-9E491C20F758}.Debug|Win32.Build.0 = Debug|Win32
+		{EFBC044E-4BEB-4CEA-BAFA-9E491C20F758}.Release|Win32.ActiveCfg = Release|Win32
+		{EFBC044E-4BEB-4CEA-BAFA-9E491C20F758}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

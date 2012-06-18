@@ -13,3 +13,7 @@ We require the following libraries to compile.
 * 	FFmpeg.
 * 	Boost.
 * 	VPX (redundent at this stage and will most likey get removed, why am I writing this then) maybe I shouldn't add to this :p
+
+For the Client:
+* Awesomium
+* ClanLib

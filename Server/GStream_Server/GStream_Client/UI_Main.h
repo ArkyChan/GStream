@@ -10,32 +10,76 @@
 #include <ClanLib/gl.h>
 #include <ClanLib/application.h>
 
+// UI loging levels
+enum UI_ERROR_LEVEL 
+{
+	UIE_INFO,
+	UIE_WARN,
+	UIE_ERROR
+};
+
+//#define UI_GOBAL_CSS "::-webkit-scrollbar {width: 12px; height: 12px; background-color: #f2f2f1; } ::-webkit-scrollbar-track { border-radius: 10px; border: 1px solid #bbb7b3; background: -webkit-gradient(linear, left top, right top, color-stop(0, #dcd9d7), color-stop(1, #e5e3e2)); } ::-webkit-scrollbar-thumb {  border-radius: 10px; -webkit-box-shadow: inset 1px 0 0 1px white; border: 1px solid #9c9996; background: -webkit-gradient(linear, left top, right top, color-stop(0, #f9f9f8), color-stop(1, #e6e4e3)); } ::-webkit-scrollbar-track-piece:disabled { display: none !important; } ::-webkit-scrollbar-track:disabled { margin: 6px; }"
+#define UI_GOBAL_CSS ""
+
 class UI;
 
 UI* refToui;
 
 void g_on_key_down(const CL_InputEvent &event, const CL_InputState &state);
 
-void jsCallback (awe_webview *caller, const awe_string *object_name, const awe_string *callback_name, const awe_jsarray *arguments)
+char* awe_string_toChar(const awe_string * aweStr)
 {
-	char buff[16];
-	awe_string_to_utf8(callback_name, buff, awe_string_get_length(callback_name));
-	std::string msg ("jsCallback: ");
-	msg.append(buff);
-	msg.append(" ");
-	//awe_jsvalue_to_string(arguments[0]);
-	msg.append("\n");
-	OutputDebugString (msg.c_str());
+	int len = awe_string_get_length(aweStr);
+	char *buff = (char*)malloc((len+1)*sizeof(char));
+	awe_string_to_utf8(aweStr, buff, len);
+	buff[len] = '\0';
+
+	return buff;
 }
 
+// Decide what to do when javascripts calls us
+void jsCallback (awe_webview *caller, const awe_string *object_name, const awe_string *callback_name, const awe_jsarray *arguments)
+{
+	char* aweObjectName = awe_string_toChar(object_name);
+	char* aweCallbackName = awe_string_toChar(callback_name);
+
+	std::string msg ("jsCallback: ");
+	msg.append(aweObjectName);
+	msg.append(" Object name: ");
+	msg.append(aweCallbackName);
+	msg.append("\n");
+	OutputDebugString (msg.c_str());
+
+	free(aweObjectName);
+	free(aweCallbackName);
+}
+
+// Oh noes javascripts gotten an error
 void jsConsole (awe_webview *caller, const awe_string *message, int line_number, const awe_string *source)
 {
-	/*char buff[128];
-	awe_string_to_utf8(message, buff, awe_string_get_length(message));
+	char* aweMsg = awe_string_toChar(message);
+
 	std::string msg ("Java Script Error: ");
-	msg.append(buff);
+	msg.append(aweMsg);
 	msg.append("\n");
-	OutputDebugString (msg.c_str());*/
+	OutputDebugString (msg.c_str());
+
+	free(aweMsg);
+}
+
+// Calls a javaScript function
+// Leave object empty for Gobal scope and frame empty for the main frame :)
+void callJSFunc(awe_webview * view, char* object, char* function, const awe_jsarray * args, char* frame)
+{
+	awe_string* objStr = awe_string_create_from_ascii(object, strlen(object));
+	awe_string* funcStr = awe_string_create_from_ascii(function, strlen(function));
+	awe_string* frameStr = awe_string_create_from_ascii(frame, strlen(frame));
+
+	awe_webview_call_javascript_function(view, objStr, funcStr, args, frameStr);
+
+	awe_string_destroy(objStr);
+	awe_string_destroy(funcStr);
+	awe_string_destroy(frameStr);
 }
 
 class UI
@@ -59,11 +103,14 @@ public:
 		pbuff = CL_PixelBuffer (width, height, cl_argb8);
 		//img = CL_Image (renderWindow->get_gc(), pbuff, pbuff.get_size());
 
+		awe_string* cssStr = awe_string_create_from_ascii(UI_GOBAL_CSS, strlen(UI_GOBAL_CSS));
 		//awe_webcore_initialize_default();
 		awe_webcore_initialize(true, true, false, awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(), awe_string_empty(),
 			AWE_LL_NORMAL, false, awe_string_empty(), true,
 			awe_string_empty(),awe_string_empty(),awe_string_empty(),awe_string_empty(),awe_string_empty(),awe_string_empty(),
-			false, 0, false, false , awe_string_empty());
+			false, 0, false, false , cssStr);
+
+		awe_string_destroy(cssStr);
 
 		webView = awe_webcore_create_webview(width, height, false);
 
@@ -127,6 +174,29 @@ public:
 		awe_webview_resize(webView, w, h, false, 15);
 	}
 
+	// Log info to the console window in the ui
+	void logInfo(UI_ERROR_LEVEL level, char* msg)
+	{
+		// Some how i feel this should be simpler and nicer :/
+		const awe_jsvalue* args[1];
+
+		awe_string* msgStr = awe_string_create_from_ascii(msg, strlen(msg));
+		args[0] = awe_jsvalue_create_string_value(msgStr);
+
+		awe_jsarray* arr = awe_jsarray_create(args, 1);
+
+		if (level == UIE_INFO)
+			callJSFunc(webView, "", "ui_logInfo", arr, "");
+		else if (level == UIE_WARN)
+			callJSFunc(webView, "", "ui_logWarn", arr, "");
+		else if (level == UIE_ERROR)
+			callJSFunc(webView, "", "ui_logError", arr, "");
+
+		awe_string_destroy(msgStr);
+		//awe_jsvalue_destroy(args);
+		awe_jsarray_destroy(arr);
+	}
+
 	void render()
 	{
 		// Get input
@@ -157,12 +227,6 @@ public:
 			simKeyDown(27);
 
 		simKeyPress(event.str.c_str()[0]);
-
-		// Print out the key
-		/*std::string msg ("keyPress: ");
-		msg.append(event.str.c_str());
-		msg.append("\n");
-		OutputDebugString (msg.c_str());*/
 	}
 
 	~UI()
@@ -195,9 +259,9 @@ private:
 			awe_webview_inject_mouse_move(webView, mouse.get_x(), mouse.get_y());
 
 			if (mouse.get_keycode(CL_MOUSE_LEFT))
-				awe_webview_inject_mouse_down(webView, awe_mousebutton::AWE_MB_LEFT);
+				awe_webview_inject_mouse_down(webView, AWE_MB_LEFT);
 			else
-				awe_webview_inject_mouse_up(webView, awe_mousebutton::AWE_MB_LEFT);
+				awe_webview_inject_mouse_up(webView, AWE_MB_LEFT);
 
 			// Relaod the page
 			if (mouse.get_keycode(CL_MOUSE_RIGHT))
@@ -212,7 +276,7 @@ private:
 	void simKeyPress(int keyID)
 	{
 		awe_webkeyboardevent kbe;
-		kbe.type = awe_webkey_type::AWE_WKT_KEYDOWN;
+		kbe.type = AWE_WKT_KEYDOWN;
 		kbe.text[0] = keyID;
 		kbe.text[1] = (wchar_t)0;
 		kbe.text[2] = (wchar_t)0;
@@ -222,10 +286,10 @@ private:
 		kbe.is_system_key = false;
 		awe_webview_inject_keyboard_event(webView, kbe);
 
-		kbe.type = awe_webkey_type::AWE_WKT_CHAR;
+		kbe.type = AWE_WKT_CHAR;
 		awe_webview_inject_keyboard_event(webView, kbe);
 
-		kbe.type = awe_webkey_type::AWE_WKT_KEYUP;
+		kbe.type = AWE_WKT_KEYUP;
 		awe_webview_inject_keyboard_event(webView, kbe);
 	}
 
@@ -233,7 +297,7 @@ private:
 	void simKeyDown(int keyID)
 	{
 		awe_webkeyboardevent kbe;
-		kbe.type = awe_webkey_type::AWE_WKT_KEYDOWN;
+		kbe.type = AWE_WKT_KEYDOWN;
 		kbe.virtual_key_code = keyID;
 		kbe.native_key_code = 0;
 		kbe.modifiers = 0;

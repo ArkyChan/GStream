@@ -52,6 +52,13 @@ int Program::main (const std::vector<CL_String> &args)
 
 		ui->render();
 
+		if (ic.get_keyboard().get_keycode(CL_KEY_Y))
+		{
+			ui->logInfo(UIE_INFO, "Yayifications!");
+			ui->logInfo(UIE_WARN, "Yayifications!");
+			ui->logInfo(UIE_ERROR, "Yayifications!");
+		}
+
 		window.flip();
 
 		CL_KeepAlive::process();
